@@ -1,0 +1,33 @@
+{
+  "id": "reference/tools/common-bugs-and-glitches",
+  "title": "Common Bugs and Glitches",
+  "description": "Known issues, edge cases, and gotchas when working with tools in submissions.",
+  "source": "@site/docs/ec/reference/tools/common-bugs-and-glitches.md",
+  "sourceDirName": "reference/tools",
+  "slug": "/reference/tools/common-bugs-and-glitches",
+  "permalink": "/reference/tools/common-bugs-and-glitches",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "title": "Common Bugs and Glitches",
+    "sidebar_position": 6,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "Tools Team",
+      "QA Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "open_search",
+    "permalink": "/reference/tools/open-search"
+  },
+  "next": {
+    "title": "FAQ & Glossary",
+    "permalink": "/reference/faq-glossary"
+  }
+}

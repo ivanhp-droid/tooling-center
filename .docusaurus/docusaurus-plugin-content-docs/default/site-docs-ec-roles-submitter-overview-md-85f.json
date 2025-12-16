@@ -1,0 +1,32 @@
+{
+  "id": "roles/submitter/overview",
+  "title": "Submitter Overview",
+  "description": "Your Role",
+  "source": "@site/docs/ec/roles/submitter/overview.md",
+  "sourceDirName": "roles/submitter",
+  "slug": "/roles/submitter/overview",
+  "permalink": "/roles/submitter/overview",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Submitter Overview",
+    "sidebar_position": 1,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "EC Ops Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Introduction",
+    "permalink": "/intro"
+  },
+  "next": {
+    "title": "Submitter Checklist",
+    "permalink": "/roles/submitter/checklist"
+  }
+}

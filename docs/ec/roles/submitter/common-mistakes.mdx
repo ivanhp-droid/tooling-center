@@ -1,0 +1,112 @@
+---
+title: Common Mistakes
+sidebar_position: 3
+effectiveDate: 2025-12-16
+owners:
+  - EC Ops Team
+  - Quality Team
+---
+
+import GoodBadExample from '@site/src/components/GoodBadExample';
+
+# Common Submitter Mistakes
+
+Learn from the most frequent errors to improve your submission quality.
+
+## 1. Vague or Ambiguous Intents
+
+### Problem
+Intents that don't clearly define success or allow multiple interpretations.
+
+<GoodBadExample
+  bad={
+    <div>
+      <p><strong>Intent:</strong> "Help the user with their question"</p>
+      <p><em>Too vague - what kind of question? What does "help" mean?</em></p>
+    </div>
+  }
+  good={
+    <div>
+      <p><strong>Intent:</strong> "Provide a factual, cited answer to a specific historical question using web search"</p>
+      <p><em>Clear success criteria and scope</em></p>
+    </div>
+  }
+/>
+
+## 2. System Prompts That Don't Enable the Intent
+
+### Problem
+System prompt doesn't give the AI the tools or instructions needed to fulfill the intent.
+
+<GoodBadExample
+  bad={
+    <div>
+      <p><strong>Intent:</strong> Search the web for recent news</p>
+      <p><strong>System Prompt:</strong> "You are a helpful assistant."</p>
+      <p><em>Missing tool permissions and search instructions</em></p>
+    </div>
+  }
+  good={
+    <div>
+      <p><strong>Intent:</strong> Search the web for recent news</p>
+      <p><strong>System Prompt:</strong> "You are a helpful assistant with access to web search tools. When users ask about recent events, use the news_search tool to find current information."</p>
+      <p><em>Includes tool permissions and usage guidance</em></p>
+    </div>
+  }
+/>
+
+## 3. Unrealistic Failure Modes
+
+### Problem
+Bad responses that are obviously terrible or wouldn't realistically come from an AI.
+
+:::danger Common Error
+Creating bad responses that are completely nonsensical or include obvious errors like:
+- Random gibberish
+- "ERROR: System malfunction"
+- Completely off-topic responses
+
+These don't represent real failure modes!
+:::
+
+## 4. Good and Bad Responses Too Similar
+
+### Problem
+The difference between good and bad responses isn't clear or meaningful.
+
+:::tip Best Practice
+The contrast should be **obvious** to reviewers. If you have to explain the difference in detail, the examples probably aren't distinct enough.
+:::
+
+## 5. Missing Context in User Prompts
+
+### Problem
+User prompts that assume information not provided in the conversation.
+
+<details>
+<summary>See Example</summary>
+
+**Bad:** "What happened next?" (Reader doesn't know what "next" refers to)
+
+**Good:** "After the Apollo 11 landing in 1969, what was the next major milestone in the space program?"
+
+</details>
+
+## 6. Over-Complicated Scenarios
+
+### Problem
+Creating unnecessarily complex edge cases that test multiple things at once.
+
+:::info Keep It Simple
+Focus on **one clear failure mode** per submission. Complex scenarios make it harder for reviewers and less useful for training.
+:::
+
+---
+
+:::note TODO
+**Content to Add:**
+- More detailed examples for each mistake
+- Statistics on most common rejection reasons
+- Interactive quiz to test understanding
+- Before/after examples showing fixes
+:::

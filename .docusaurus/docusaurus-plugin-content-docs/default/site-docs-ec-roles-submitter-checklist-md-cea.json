@@ -1,0 +1,32 @@
+{
+  "id": "roles/submitter/checklist",
+  "title": "Submitter Checklist",
+  "description": "Use this checklist for every submission to ensure quality and consistency.",
+  "source": "@site/docs/ec/roles/submitter/checklist.md",
+  "sourceDirName": "roles/submitter",
+  "slug": "/roles/submitter/checklist",
+  "permalink": "/roles/submitter/checklist",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Submitter Checklist",
+    "sidebar_position": 2,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "EC Ops Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Submitter Overview",
+    "permalink": "/roles/submitter/overview"
+  },
+  "next": {
+    "title": "Common Mistakes",
+    "permalink": "/roles/submitter/common-mistakes"
+  }
+}

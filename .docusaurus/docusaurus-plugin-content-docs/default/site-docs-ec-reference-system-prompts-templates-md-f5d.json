@@ -1,0 +1,32 @@
+{
+  "id": "reference/system-prompts/templates",
+  "title": "System Prompt Templates",
+  "description": "Ready-to-use templates for common scenarios. Customize as needed for your specific intent.",
+  "source": "@site/docs/ec/reference/system-prompts/templates.md",
+  "sourceDirName": "reference/system-prompts",
+  "slug": "/reference/system-prompts/templates",
+  "permalink": "/reference/system-prompts/templates",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "System Prompt Templates",
+    "sidebar_position": 2,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "Prompt Engineering Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Rules and Patterns",
+    "permalink": "/reference/system-prompts/rules-and-patterns"
+  },
+  "next": {
+    "title": "Tools Overview",
+    "permalink": "/reference/tools/overview"
+  }
+}

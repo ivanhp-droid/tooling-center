@@ -1,0 +1,33 @@
+{
+  "id": "roles/reviewer/how-to-write-feedback",
+  "title": "How to Write Feedback",
+  "description": "Great feedback helps submitters improve and maintains project quality. Learn how to write feedback that's clear, actionable, and constructive.",
+  "source": "@site/docs/ec/roles/reviewer/how-to-write-feedback.md",
+  "sourceDirName": "roles/reviewer",
+  "slug": "/roles/reviewer/how-to-write-feedback",
+  "permalink": "/roles/reviewer/how-to-write-feedback",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "How to Write Feedback",
+    "sidebar_position": 3,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "EC Ops Team",
+      "Reviewer Lead"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Rubric and Checklist",
+    "permalink": "/roles/reviewer/rubric-and-checklist"
+  },
+  "next": {
+    "title": "Common Edge Cases",
+    "permalink": "/roles/reviewer/common-edge-cases"
+  }
+}

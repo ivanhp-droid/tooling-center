@@ -1,0 +1,33 @@
+{
+  "id": "reference/faq-glossary",
+  "title": "FAQ & Glossary",
+  "description": "Quick answers to common questions and definitions of key terms.",
+  "source": "@site/docs/ec/reference/faq-glossary.md",
+  "sourceDirName": "reference",
+  "slug": "/reference/faq-glossary",
+  "permalink": "/reference/faq-glossary",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "title": "FAQ & Glossary",
+    "sidebar_position": 7,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "Documentation Team",
+      "EC Ops Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Common Bugs and Glitches",
+    "permalink": "/reference/tools/common-bugs-and-glitches"
+  },
+  "next": {
+    "title": "Changelog",
+    "permalink": "/reference/changelog"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "roles/adjudicator/common-edge-cases",
+  "title": "Common Edge Cases",
+  "description": "Real-world examples of complex cases and how to handle them.",
+  "source": "@site/docs/ec/roles/adjudicator/common-edge-cases.md",
+  "sourceDirName": "roles/adjudicator",
+  "slug": "/roles/adjudicator/common-edge-cases",
+  "permalink": "/roles/adjudicator/common-edge-cases",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Common Edge Cases",
+    "sidebar_position": 3,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "EC Ops Team",
+      "Adjudication Lead"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Tie-Breaking Principles",
+    "permalink": "/roles/adjudicator/tie-breaking-principles"
+  },
+  "next": {
+    "title": "Step 1: Intent",
+    "permalink": "/reference/workflow/step-1-intent"
+  }
+}

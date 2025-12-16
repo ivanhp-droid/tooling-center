@@ -1,0 +1,32 @@
+{
+  "id": "reference/failure-modes/instruction-retention",
+  "title": "Instruction Retention",
+  "description": "Definition",
+  "source": "@site/docs/ec/reference/failure-modes/instruction-retention.md",
+  "sourceDirName": "reference/failure-modes",
+  "slug": "/reference/failure-modes/instruction-retention",
+  "permalink": "/reference/failure-modes/instruction-retention",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Instruction Retention",
+    "sidebar_position": 2,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "AI Safety Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Failure Modes Overview",
+    "permalink": "/reference/failure-modes/overview"
+  },
+  "next": {
+    "title": "Course Correction",
+    "permalink": "/reference/failure-modes/course-correction"
+  }
+}

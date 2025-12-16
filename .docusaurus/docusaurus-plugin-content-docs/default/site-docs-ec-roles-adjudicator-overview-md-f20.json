@@ -1,0 +1,33 @@
+{
+  "id": "roles/adjudicator/overview",
+  "title": "Adjudicator Overview",
+  "description": "Your Role",
+  "source": "@site/docs/ec/roles/adjudicator/overview.md",
+  "sourceDirName": "roles/adjudicator",
+  "slug": "/roles/adjudicator/overview",
+  "permalink": "/roles/adjudicator/overview",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Adjudicator Overview",
+    "sidebar_position": 1,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "EC Ops Team",
+      "Adjudication Lead"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Common Edge Cases",
+    "permalink": "/roles/reviewer/common-edge-cases"
+  },
+  "next": {
+    "title": "Tie-Breaking Principles",
+    "permalink": "/roles/adjudicator/tie-breaking-principles"
+  }
+}

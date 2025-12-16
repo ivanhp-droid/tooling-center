@@ -1,0 +1,33 @@
+{
+  "id": "roles/adjudicator/tie-breaking-principles",
+  "title": "Tie-Breaking Principles",
+  "description": "When faced with borderline cases or disagreements, use these principles to make consistent, defensible decisions.",
+  "source": "@site/docs/ec/roles/adjudicator/tie-breaking-principles.md",
+  "sourceDirName": "roles/adjudicator",
+  "slug": "/roles/adjudicator/tie-breaking-principles",
+  "permalink": "/roles/adjudicator/tie-breaking-principles",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Tie-Breaking Principles",
+    "sidebar_position": 2,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "EC Ops Team",
+      "Adjudication Lead"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Adjudicator Overview",
+    "permalink": "/roles/adjudicator/overview"
+  },
+  "next": {
+    "title": "Common Edge Cases",
+    "permalink": "/roles/adjudicator/common-edge-cases"
+  }
+}

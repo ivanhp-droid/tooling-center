@@ -1,0 +1,33 @@
+{
+  "id": "reference/failure-modes/overview",
+  "title": "Failure Modes Overview",
+  "description": "Failure modes are specific, identifiable ways that AI systems can behave incorrectly or suboptimally. Understanding these patterns is essential for creating effective training data.",
+  "source": "@site/docs/ec/reference/failure-modes/overview.md",
+  "sourceDirName": "reference/failure-modes",
+  "slug": "/reference/failure-modes/overview",
+  "permalink": "/reference/failure-modes/overview",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Failure Modes Overview",
+    "sidebar_position": 1,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "AI Safety Team",
+      "Training Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Step 6: Final Review Checklist",
+    "permalink": "/reference/workflow/step-6-review-checklist"
+  },
+  "next": {
+    "title": "Instruction Retention",
+    "permalink": "/reference/failure-modes/instruction-retention"
+  }
+}

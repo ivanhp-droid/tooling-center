@@ -1,0 +1,32 @@
+{
+  "id": "reference/workflow/step-5-good-response",
+  "title": "Step 5: Good Response",
+  "description": "The good response demonstrates the correct AI behavior—how the model should respond when following instructions properly.",
+  "source": "@site/docs/ec/reference/workflow/step-5-good-response.md",
+  "sourceDirName": "reference/workflow",
+  "slug": "/reference/workflow/step-5-good-response",
+  "permalink": "/reference/workflow/step-5-good-response",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "Step 5: Good Response",
+    "sidebar_position": 5,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "Workflow Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Step 4: Bad Response",
+    "permalink": "/reference/workflow/step-4-bad-response"
+  },
+  "next": {
+    "title": "Step 6: Final Review Checklist",
+    "permalink": "/reference/workflow/step-6-review-checklist"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "intro",
+  "title": "Introduction",
+  "description": "This documentation site is your single source of truth for all project guidelines, whether you're an External Contributor (Submitter, Reviewer, Adjudicator) or part of the internal Snorkel/Mistral team.",
+  "source": "@site/docs/ec/intro.md",
+  "sourceDirName": ".",
+  "slug": "/intro",
+  "permalink": "/intro",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Introduction",
+    "sidebar_position": 1,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "EC Ops Team",
+      "Documentation Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "next": {
+    "title": "Submitter Overview",
+    "permalink": "/roles/submitter/overview"
+  }
+}

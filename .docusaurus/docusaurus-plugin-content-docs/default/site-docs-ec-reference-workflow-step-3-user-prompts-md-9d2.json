@@ -1,0 +1,32 @@
+{
+  "id": "reference/workflow/step-3-user-prompts",
+  "title": "Step 3: User Prompts",
+  "description": "The user prompt is what a user would naturally ask or say to the AI. It should test whether the AI follows the system prompt and fulfills the intent.",
+  "source": "@site/docs/ec/reference/workflow/step-3-user-prompts.md",
+  "sourceDirName": "reference/workflow",
+  "slug": "/reference/workflow/step-3-user-prompts",
+  "permalink": "/reference/workflow/step-3-user-prompts",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Step 3: User Prompts",
+    "sidebar_position": 3,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "Workflow Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Step 2: System Prompt",
+    "permalink": "/reference/workflow/step-2-system-prompt"
+  },
+  "next": {
+    "title": "Step 4: Bad Response",
+    "permalink": "/reference/workflow/step-4-bad-response"
+  }
+}

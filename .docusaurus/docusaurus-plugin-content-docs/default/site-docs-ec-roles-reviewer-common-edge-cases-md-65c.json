@@ -1,0 +1,33 @@
+{
+  "id": "roles/reviewer/common-edge-cases",
+  "title": "Common Edge Cases",
+  "description": "Navigate tricky situations with confidence. This guide covers the most common edge cases reviewers encounter and how to handle them.",
+  "source": "@site/docs/ec/roles/reviewer/common-edge-cases.md",
+  "sourceDirName": "roles/reviewer",
+  "slug": "/roles/reviewer/common-edge-cases",
+  "permalink": "/roles/reviewer/common-edge-cases",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Common Edge Cases",
+    "sidebar_position": 4,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "EC Ops Team",
+      "Reviewer Lead"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "How to Write Feedback",
+    "permalink": "/roles/reviewer/how-to-write-feedback"
+  },
+  "next": {
+    "title": "Adjudicator Overview",
+    "permalink": "/roles/adjudicator/overview"
+  }
+}

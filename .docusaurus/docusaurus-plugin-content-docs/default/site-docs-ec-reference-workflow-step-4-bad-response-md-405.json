@@ -1,0 +1,32 @@
+{
+  "id": "reference/workflow/step-4-bad-response",
+  "title": "Step 4: Bad Response",
+  "description": "The bad response demonstrates a specific failure mode—a problematic AI behavior we want to teach the model to avoid.",
+  "source": "@site/docs/ec/reference/workflow/step-4-bad-response.md",
+  "sourceDirName": "reference/workflow",
+  "slug": "/reference/workflow/step-4-bad-response",
+  "permalink": "/reference/workflow/step-4-bad-response",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": null,
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Step 4: Bad Response",
+    "sidebar_position": 4,
+    "effectiveDate": "2025-12-16T00:00:00.000Z",
+    "owners": [
+      "Workflow Team"
+    ]
+  },
+  "sidebar": "ecSidebar",
+  "previous": {
+    "title": "Step 3: User Prompts",
+    "permalink": "/reference/workflow/step-3-user-prompts"
+  },
+  "next": {
+    "title": "Step 5: Good Response",
+    "permalink": "/reference/workflow/step-5-good-response"
+  }
+}
