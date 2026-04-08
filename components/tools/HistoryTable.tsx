@@ -16,7 +16,9 @@ export function HistoryTable({ items }: { items: ExecutionHistoryRecord[] }) {
             <th className="px-3 py-2">CSV</th>
             <th className="px-3 py-2">Rows</th>
             <th className="px-3 py-2">Status</th>
-            <th className="px-3 py-2">Result</th>
+            <th className="px-3 py-2">Totals</th>
+            <th className="px-3 py-2">Auth</th>
+            <th className="px-3 py-2">Details</th>
           </tr>
         </thead>
         <tbody>
@@ -32,7 +34,16 @@ export function HistoryTable({ items }: { items: ExecutionHistoryRecord[] }) {
               <td className="px-3 py-2 whitespace-nowrap">{h.rowCount ?? '—'}</td>
               <td className="px-3 py-2 whitespace-nowrap">{h.status}</td>
               <td className="px-3 py-2 whitespace-nowrap">
-                {h.resultSummary.success}/{h.resultSummary.total} ok
+                <span className="text-emerald-700">{h.resultSummary.success}</span> /
+                <span className="text-slate-700"> {h.resultSummary.total}</span> ok ·{' '}
+                <span className="text-rose-700">{h.resultSummary.failed}</span> failed ·{' '}
+                <span className="text-amber-700">{h.resultSummary.skipped}</span> skipped
+              </td>
+              <td className="px-3 py-2 whitespace-nowrap">{h.auth.apiKeyUsed ? 'Yes' : 'No'}</td>
+              <td className="px-3 py-2 whitespace-nowrap">
+                <Link className="text-blue-700 hover:underline" href={`/history/${h.id}`}>
+                  View
+                </Link>
               </td>
             </tr>
           ))}

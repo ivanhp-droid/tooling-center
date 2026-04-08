@@ -1,6 +1,8 @@
-export type CsvValidationError = {
-  type: 'file' | 'schema' | 'cell';
+export type CsvValidationIssue = {
+  severity: 'error' | 'warning';
+  scope: 'file' | 'schema' | 'row';
   message: string;
+  code?: string;
   rowIndex?: number;
   columnKey?: string;
 };
@@ -11,7 +13,7 @@ export type CsvParseResult = {
   rowCount: number;
   rows: Record<string, string>[];
   previewRows: Record<string, string>[];
-  errors: CsvValidationError[];
+  issues: CsvValidationIssue[];
   requiredColumnsMissing: string[];
 };
 

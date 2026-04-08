@@ -38,8 +38,11 @@ export function ExecutionSummary({ result }: { result: ToolExecutionResult }) {
         </div>
       </div>
 
-      <div className="mt-3 text-xs text-slate-600">
-        {new Date(result.startedAt).toLocaleString()} → {new Date(result.finishedAt).toLocaleString()}
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+        <div>
+          {new Date(result.startedAt).toLocaleString()} → {new Date(result.finishedAt).toLocaleString()}
+        </div>
+        <div>{typeof result.durationMs === 'number' ? `${result.durationMs}ms` : null}</div>
       </div>
     </div>
   );

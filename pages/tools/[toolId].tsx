@@ -9,6 +9,7 @@ import { ApiKeyStatusBanner } from '@/components/tools/ApiKeyStatusBanner';
 import { CsvUploader } from '@/components/tools/CsvUploader';
 import { CsvValidationSummary } from '@/components/tools/CsvValidationSummary';
 import { CsvPreviewTable } from '@/components/tools/CsvPreviewTable';
+import { CsvSchemaDetails } from '@/components/tools/CsvSchemaDetails';
 import { DynamicFieldRenderer } from '@/components/tools/DynamicFieldRenderer';
 import { Button } from '@/components/common/Button';
 import { Card } from '@/components/common/Card';
@@ -32,6 +33,7 @@ export default function ToolPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [result, setResult] = useState<Awaited<ReturnType<NonNullable<typeof tool>['execute']>> | null>(null);
 
+  // Ensure hooks always run in same order; render "not found" after hook declarations.
   if (!tool) {
     return (
       <AdminLayout>
@@ -50,9 +52,11 @@ export default function ToolPage() {
     );
   }
 
+  const resolvedTool = tool;
   const apiKeyStatus = apiKeyStore.status();
-  const csvOk = !tool.requiresCsv || (csv && csv.errors.length === 0 && csv.rowCount > 0);
-  const apiKeyOk = !tool.requiresApiKey || apiKeyStatus.present;
+  const csvOk =
+    !resolvedTool.requiresCsv || (csv && csv.issues.every((i) => i.severity !== 'error') && csv.rowCount > 0);
+  const apiKeyOk = !resolvedTool.requiresApiKey || apiKeyStatus.present;
   const canRun = Boolean(csvOk && apiKeyOk && !running);
 
   async function runTool() {
@@ -60,8 +64,8 @@ export default function ToolPage() {
     setRunning(true);
     setResult(null);
     try {
-      const apiKey = tool.requiresApiKey ? apiKeyStore.get() ?? undefined : undefined;
-      const exec = await tool.execute({
+      const apiKey = resolvedTool.requiresApiKey ? apiKeyStore.get() ?? undefined : undefined;
+      const exec = await resolvedTool.execute({
         apiKey,
         csv: csv
           ? { filename: csv.filename, rowCount: csv.rowCount, rows: csv.rows }
@@ -70,9 +74,10 @@ export default function ToolPage() {
       });
       setResult(exec);
       addHistoryRecord({
-        toolId: tool.id,
-        toolName: tool.name,
+        toolId: resolvedTool.id,
+        toolName: resolvedTool.name,
         timestamp: new Date().toISOString(),
+        auth: { apiKeyUsed: Boolean(apiKey) },
         csvFilename: csv?.filename,
         rowCount: csv?.rowCount,
         inputSummary: buildHistoryInputSummary({
@@ -81,6 +86,7 @@ export default function ToolPage() {
           fields
         }),
         status: exec.status,
+        durationMs: exec.durationMs,
         resultSummary: exec.summary
       });
     } catch (e) {
@@ -99,6 +105,34 @@ export default function ToolPage() {
           {tool.requiresCsv && tool.csvSchema ? (
             <Card title="CSV Input" subtitle="Upload a CSV matching this tool’s schema.">
               <div className="space-y-3">
+                <div className="text-sm text-slate-700">
+                  {tool.helpText?.overview ? <div className="mb-2">{tool.helpText.overview}</div> : null}
+                  {tool.csvSchema.notes && tool.csvSchema.notes.length > 0 ? (
+                    <ul className="list-disc pl-5 text-slate-600">
+                      {tool.csvSchema.notes.map((n, idx) => (
+                        <li key={idx}>{n}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="text-xs text-slate-600">
+                    Expected columns:{' '}
+                    <span className="font-mono">
+                      {tool.csvSchema.columns.map((c) => c.key).join(', ')}
+                    </span>
+                  </div>
+                  {tool.csvSchema.templateCsv ? (
+                    <a
+                      className="text-sm text-blue-700 hover:underline"
+                      href={`data:text/csv;charset=utf-8,${encodeURIComponent(tool.csvSchema.templateCsv.content)}`}
+                      download={tool.csvSchema.templateCsv.filename}
+                    >
+                      Download CSV template
+                    </a>
+                  ) : null}
+                </div>
                 <CsvUploader
                   onLoaded={({ filename, text }) => {
                     const parsed = parseAndValidateCsv({ filename, text, schema: tool.csvSchema! });
@@ -109,7 +143,8 @@ export default function ToolPage() {
                 />
                 {csv ? (
                   <>
-                    <CsvValidationSummary parse={csv} />
+                    <CsvValidationSummary parse={csv} schema={tool.csvSchema} />
+                    <CsvSchemaDetails schema={tool.csvSchema} />
                     <CsvPreviewTable headers={csv.headers} rows={csv.previewRows} />
                   </>
                 ) : (
@@ -170,12 +205,25 @@ export default function ToolPage() {
             }}
             riskLevel={tool.riskLevel}
             title={`Confirm: ${tool.name}`}
+            mode={
+              tool.confirmation?.mode === 'none'
+                ? 'standard'
+                : tool.confirmation?.mode ?? (tool.riskLevel === 'high' ? 'strong' : 'standard')
+            }
+            warningText={tool.confirmation?.warningText}
+            requireCheckbox={tool.confirmation?.strongRequiresCheckbox}
+            typedConfirmText={tool.confirmation?.strongRequiresTyped}
             body={
               <div className="space-y-2">
                 <div>
                   CSV file: <span className="font-mono">{csv?.filename ?? '(none)'}</span>
                 </div>
                 <div>Rows: {csv?.rowCount ?? 0}</div>
+                {tool.helpText?.reversibility ? (
+                  <div className="text-xs text-slate-600">
+                    Reversibility: <span className="text-slate-700">{tool.helpText.reversibility}</span>
+                  </div>
+                ) : null}
               </div>
             }
           />

@@ -9,10 +9,20 @@ export type CsvColumnSchema = {
   type: CsvColumnType;
   description?: string;
   example?: string;
+  allowedValues?: string[];
+  pattern?: string;
 };
 
 export type CsvSchema = {
   columns: CsvColumnSchema[];
+  allowUnknownColumns?: boolean;
+  unknownColumnsSeverity?: 'warning' | 'error';
+  keyColumns?: string[];
+  templateCsv?: {
+    filename: string;
+    content: string;
+  };
+  notes?: string[];
 };
 
 export type DynamicFieldType = 'text' | 'textarea' | 'select' | 'checkbox' | 'number';
@@ -51,6 +61,7 @@ export type ToolExecutionResult = {
   status: 'success' | 'partial_success' | 'failed';
   startedAt: string;
   finishedAt: string;
+  durationMs?: number;
   summary: {
     total: number;
     success: number;
@@ -74,6 +85,17 @@ export type ToolDefinition = {
   requiresCsv: boolean;
   csvSchema?: CsvSchema;
   additionalFields?: DynamicFieldDefinition[];
+  helpText?: {
+    overview?: string;
+    csvTips?: string[];
+    reversibility?: string;
+  };
+  confirmation?: {
+    mode: 'none' | 'standard' | 'strong';
+    strongRequiresCheckbox?: boolean;
+    strongRequiresTyped?: string;
+    warningText?: string;
+  };
   output: ToolOutputConfig;
   execute: (input: ToolExecutionInput) => Promise<ToolExecutionResult>;
 };

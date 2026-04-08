@@ -4,7 +4,9 @@ import type { CsvSchema } from '@/lib/tools/types';
 export function CsvValidationSummary(props: { parse: CsvParseResult | null; schema?: CsvSchema }) {
   const { parse, schema } = props;
   if (!parse) return null;
-  const hasErrors = parse.errors.length > 0;
+  const errors = parse.issues.filter((i) => i.severity === 'error');
+  const warnings = parse.issues.filter((i) => i.severity === 'warning');
+  const hasErrors = errors.length > 0;
   return (
     <div className="rounded border bg-white p-3">
       <div className="flex items-center justify-between">
@@ -24,20 +26,31 @@ export function CsvValidationSummary(props: { parse: CsvParseResult | null; sche
         <div className="mt-2 text-sm text-red-700">
           <div className="font-medium">Issues found</div>
           <ul className="mt-1 list-disc pl-5">
-            {parse.errors.slice(0, 8).map((e, idx) => (
+            {errors.slice(0, 8).map((e, idx) => (
               <li key={idx}>
-                {e.type === 'cell' ? `Row ${Number(e.rowIndex ?? 0) + 1}, ${e.columnKey}: ` : ''}
+                {e.scope === 'row' ? `Row ${Number(e.rowIndex ?? 0) + 1}${e.columnKey ? `, ${e.columnKey}` : ''}: ` : ''}
                 {e.message}
               </li>
             ))}
           </ul>
-          {parse.errors.length > 8 ? (
+          {errors.length > 8 ? (
             <div className="mt-1 text-xs text-gray-600">Showing first 8 issues.</div>
           ) : null}
         </div>
       ) : (
-        <div className="mt-2 text-sm text-green-700">No validation errors detected.</div>
+        <div className="mt-2 text-sm text-green-700">No blocking validation errors detected.</div>
       )}
+      {warnings.length > 0 ? (
+        <div className="mt-2 text-sm text-amber-800">
+          <div className="font-medium">Warnings</div>
+          <ul className="mt-1 list-disc pl-5">
+            {warnings.slice(0, 5).map((w, idx) => (
+              <li key={idx}>{w.message}</li>
+            ))}
+          </ul>
+          {warnings.length > 5 ? <div className="mt-1 text-xs text-slate-600">Showing first 5 warnings.</div> : null}
+        </div>
+      ) : null}
     </div>
   );
 }
