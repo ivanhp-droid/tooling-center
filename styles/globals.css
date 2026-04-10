@@ -6,6 +6,19 @@
   color-scheme: light;
 }
 
-html, body {
+html,
+body {
   height: 100%;
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply bg-slate-100 text-slate-900;
+  }
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-slate-900;
+  }
 }

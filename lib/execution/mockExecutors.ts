@@ -1,4 +1,5 @@
 import type { ToolExecutionInput, ToolExecutionResult, ToolExecutionRowResult } from '@/lib/tools/types';
+import { classifyApiKey } from '@/lib/storage/apiKeyStore';
 
 function nowIso() {
   return new Date().toISOString();
@@ -29,10 +30,7 @@ async function simulateLatency(ms: number) {
 }
 
 function isAuthBad(apiKey?: string) {
-  if (!apiKey) return true;
-  const v = apiKey.trim();
-  if (v.length < 12) return true;
-  return v.toLowerCase().includes('invalid') || v.toLowerCase().includes('revoked');
+  return classifyApiKey(apiKey) !== 'ok';
 }
 
 function makeAuthFailure(total: number): ToolExecutionResult {

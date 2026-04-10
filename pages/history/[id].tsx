@@ -6,6 +6,8 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { getHistoryById } from '@/lib/storage/historyStore';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
+import { Badge } from '@/components/common/Badge';
+import { formatDateTime, formatDurationMs } from '@/lib/format/datetime';
 
 export default function HistoryDetailPage() {
   const router = useRouter();
@@ -17,15 +19,18 @@ export default function HistoryDetailPage() {
     return (
       <AdminLayout>
         <PageHeader
-          title="History item not found"
+          title="History entry not found"
           actions={
-            <Link href="/history" className="text-sm text-slate-700 hover:underline">
+            <Link href="/history" className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium hover:bg-slate-50">
               ← Back to history
             </Link>
           }
         />
         <Card>
-          <div className="text-sm text-slate-700">No history item with id: {id || '(missing)'}</div>
+          <p className="text-sm text-slate-700">
+            No saved run matches <span className="font-mono">{id || '(missing id)'}</span>. It may have been cleared or
+            never existed on this browser.
+          </p>
         </Card>
       </AdminLayout>
     );
@@ -35,55 +40,70 @@ export default function HistoryDetailPage() {
     <AdminLayout>
       <PageHeader
         title={record.toolName}
-        subtitle={new Date(record.timestamp).toLocaleString()}
+        subtitle={`${formatDateTime(record.timestamp)} · ${formatDurationMs(record.durationMs)}`}
         actions={
-          <Link href="/history" className="text-sm text-slate-700 hover:underline">
+          <Link href="/history" className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium hover:bg-slate-50">
             ← Back to history
           </Link>
         }
       />
 
-      <div className="space-y-4">
-        <Card
-          title="Summary"
-          subtitle={`${record.status} · ${record.resultSummary.success}/${record.resultSummary.total} ok`}
-        >
-          <div className="grid grid-cols-2 gap-3 text-sm">
+      <div className="space-y-6">
+        <Card title="Run summary" subtitle="Sanitized snapshot for audit — no raw API keys.">
+          <dl className="grid gap-4 sm:grid-cols-2">
             <div>
-              <div className="text-xs text-slate-600">CSV filename</div>
-              <div className="font-mono">{record.csvFilename ?? '—'}</div>
+              <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">Status</dt>
+              <dd className="mt-1">
+                <Badge tone={record.status === 'success' ? 'success' : record.status === 'partial_success' ? 'warning' : 'danger'}>
+                  {record.status}
+                </Badge>
+              </dd>
             </div>
             <div>
-              <div className="text-xs text-slate-600">Row count</div>
-              <div>{record.rowCount ?? '—'}</div>
+              <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">Rows</dt>
+              <dd className="mt-1 text-sm font-medium text-slate-900">{record.rowCount ?? '—'}</dd>
             </div>
             <div>
-              <div className="text-xs text-slate-600">API key used</div>
-              <div>{record.auth.apiKeyUsed ? 'yes (stored as redacted)' : 'no'}</div>
+              <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">CSV file</dt>
+              <dd className="mt-1 font-mono text-sm text-slate-800">{record.csvFilename ?? '—'}</dd>
             </div>
             <div>
-              <div className="text-xs text-slate-600">Tool</div>
-              <div>
-                <Link className="text-blue-700 hover:underline" href={`/tools/${record.toolId}`}>
+              <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">API key used</dt>
+              <dd className="mt-1 text-sm text-slate-800">{record.auth.apiKeyUsed ? 'Yes (redacted in summary)' : 'No'}</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">Outcome</dt>
+              <dd className="mt-1 text-sm text-slate-800">
+                <span className="font-semibold text-emerald-800">{record.resultSummary.success}</span> succeeded ·{' '}
+                <span className="font-semibold text-rose-800">{record.resultSummary.failed}</span> failed ·{' '}
+                <span className="font-semibold text-amber-900">{record.resultSummary.skipped}</span> skipped ·{' '}
+                <span className="text-slate-600">{record.resultSummary.total} total</span>
+              </dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">Tool</dt>
+              <dd className="mt-1">
+                <Link className="font-medium text-sky-800 hover:underline" href={`/tools/${record.toolId}`}>
                   Open tool →
                 </Link>
-              </div>
+              </dd>
             </div>
-          </div>
+          </dl>
         </Card>
 
-        <Card title="Inputs (sanitized)">
-          <pre className="overflow-auto rounded bg-slate-50 p-3 text-xs">
+        <Card title="Inputs (sanitized JSON)" subtitle="Share this block in Slack or a ticket — it contains no secrets.">
+          <pre className="max-h-96 overflow-auto rounded-md border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-800">
             {JSON.stringify(record.inputSummary, null, 2)}
           </pre>
-          <div className="mt-3">
+          <div className="mt-4">
             <Button
               variant="secondary"
+              type="button"
               onClick={() => {
-                navigator.clipboard.writeText(JSON.stringify(record.inputSummary, null, 2)).catch(() => {});
+                void navigator.clipboard.writeText(JSON.stringify(record.inputSummary, null, 2));
               }}
             >
-              Copy to clipboard
+              Copy JSON
             </Button>
           </div>
         </Card>
@@ -91,4 +111,3 @@ export default function HistoryDetailPage() {
     </AdminLayout>
   );
 }
-

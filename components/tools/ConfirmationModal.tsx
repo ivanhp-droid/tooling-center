@@ -1,7 +1,9 @@
 import { Modal } from '@/components/common/Modal';
 import type { RiskLevel } from '@/lib/tools/types';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Button } from '@/components/common/Button';
+import { Badge } from '@/components/common/Badge';
+import { riskBadgeTone, riskLabel } from '@/lib/tools/risk';
 
 export function ConfirmationModal(props: {
   open: boolean;
@@ -9,7 +11,7 @@ export function ConfirmationModal(props: {
   onConfirm: () => void;
   riskLevel: RiskLevel;
   title: string;
-  body: React.ReactNode;
+  body: ReactNode;
   confirmLabel?: string;
   mode?: 'standard' | 'strong';
   warningText?: string;
@@ -23,20 +25,16 @@ export function ConfirmationModal(props: {
     riskLevel,
     title,
     body,
-    confirmLabel = 'Confirm & Run',
+    confirmLabel = 'Confirm and run',
     mode = 'standard',
     warningText,
     requireCheckbox,
     typedConfirmText
   } = props;
 
-  const riskTone =
-    riskLevel === 'high' ? 'border-red-300 bg-red-50' : riskLevel === 'medium' ? 'border-yellow-300 bg-yellow-50' : '';
-
-  const confirmVariant = riskLevel === 'high' ? 'danger' : 'primary';
-
   const [ack, setAck] = useState(false);
   const [typed, setTyped] = useState('');
+
   const typedOk = useMemo(() => {
     if (!typedConfirmText) return true;
     return typed.trim().toUpperCase() === typedConfirmText.trim().toUpperCase();
@@ -44,56 +42,96 @@ export function ConfirmationModal(props: {
 
   const canConfirm = mode !== 'strong' || ((requireCheckbox ? ack : true) && typedOk);
 
+  const riskBanner =
+    riskLevel === 'high'
+      ? 'border-rose-200 bg-rose-50 text-rose-950'
+      : riskLevel === 'medium'
+        ? 'border-amber-200 bg-amber-50 text-amber-950'
+        : 'border-slate-200 bg-slate-50 text-slate-800';
+
+  const footerConfirm = () => {
+    if (!canConfirm) return;
+    onConfirm();
+  };
+
   return (
     <Modal
       open={open}
       onClose={onClose}
-      onConfirm={() => {
-        if (!canConfirm) return;
-        onConfirm();
-      }}
-      confirmText={confirmLabel}
-      confirmVariant={confirmVariant}
+      onConfirm={mode === 'strong' ? onClose : footerConfirm}
+      confirmText={mode === 'strong' ? 'Close' : confirmLabel}
+      confirmVariant={mode === 'strong' ? 'secondary' : riskLevel === 'high' ? 'danger' : 'primary'}
       title={title}
+      description={
+        mode === 'strong'
+          ? 'Review the scope below. High-risk bulk actions need explicit acknowledgement.'
+          : 'You are about to run a bulk operation. Confirm the file and parameters match what you intend.'
+      }
+      showFooter={mode !== 'strong'}
     >
       <div className="space-y-4">
-        <div className={`rounded border p-3 text-sm ${riskTone}`}>
-          <div className="font-medium">Risk level: {riskLevel.toUpperCase()}</div>
-          <div className="text-gray-700">{warningText ?? 'Review your inputs carefully. Bulk operations may be difficult to undo.'}</div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone={riskBadgeTone(riskLevel)}>{riskLabel(riskLevel)}</Badge>
+          {mode === 'strong' ? (
+            <Badge tone="danger">Extra confirmation required</Badge>
+          ) : (
+            <Badge tone="neutral">Standard confirmation</Badge>
+          )}
         </div>
-        <div className="text-sm text-gray-900">{body}</div>
+
+        <div className={`rounded-lg border p-3 text-sm leading-relaxed ${riskBanner}`}>
+          <div className="font-semibold text-slate-900">Before you continue</div>
+          <p className="mt-1 text-slate-800">
+            {warningText ??
+              'Bulk tools can affect many records at once. Mistakes are costly to unwind—double-check your CSV and inputs.'}
+          </p>
+        </div>
+
+        <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-800">{body}</div>
+
         {mode === 'strong' ? (
-          <div className="space-y-3 rounded border border-slate-200 bg-slate-50 p-3 text-sm">
+          <div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm">
             {requireCheckbox ? (
-              <label className="flex items-start gap-2">
-                <input className="mt-1" type="checkbox" checked={ack} onChange={(e) => setAck(e.target.checked)} />
-                <span>I understand this action can revoke access / change workflow in bulk and may be disruptive.</span>
+              <label className="flex cursor-pointer items-start gap-3">
+                <input
+                  className="mt-1 size-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+                  type="checkbox"
+                  checked={ack}
+                  onChange={(e) => setAck(e.target.checked)}
+                />
+                <span className="text-slate-800">
+                  I understand this run may change production data for every row in the CSV, and that some effects may
+                  be hard to reverse.
+                </span>
               </label>
             ) : null}
             {typedConfirmText ? (
-              <div className="space-y-1">
-                <div className="text-xs text-slate-700">
-                  Type <span className="font-mono">{typedConfirmText}</span> to confirm.
-                </div>
+              <div className="space-y-2">
+                <label htmlFor="tc-typed-confirm" className="text-xs font-medium text-slate-700">
+                  Type <span className="font-mono font-semibold">{typedConfirmText}</span> to confirm you intend to run
+                  this tool.
+                </label>
                 <input
-                  className="w-full rounded border border-slate-300 px-3 py-2 font-mono text-sm"
+                  id="tc-typed-confirm"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 font-mono text-sm shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
                   value={typed}
                   onChange={(e) => setTyped(e.target.value)}
                   placeholder={typedConfirmText}
+                  autoComplete="off"
                 />
-                {!typedOk ? <div className="text-xs text-rose-700">Typed confirmation does not match.</div> : null}
+                {!typedOk ? (
+                  <p className="text-xs text-rose-700" role="alert">
+                    Confirmation text must match exactly (case-insensitive).
+                  </p>
+                ) : null}
               </div>
             ) : null}
 
-            <div className="flex items-center justify-end">
-              <Button
-                variant={confirmVariant}
-                disabled={!canConfirm}
-                onClick={() => {
-                  if (!canConfirm) return;
-                  onConfirm();
-                }}
-              >
+            <div className="flex flex-wrap items-center justify-end gap-2 border-t border-slate-200 pt-3">
+              <Button type="button" variant="secondary" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button type="button" variant={riskLevel === 'high' ? 'danger' : 'primary'} disabled={!canConfirm} onClick={footerConfirm}>
                 {confirmLabel}
               </Button>
             </div>
@@ -103,4 +141,3 @@ export function ConfirmationModal(props: {
     </Modal>
   );
 }
-
