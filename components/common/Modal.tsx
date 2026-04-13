@@ -11,7 +11,6 @@ export function Modal(props: {
   onConfirm: () => void;
   onClose: () => void;
   children?: ReactNode;
-  /** When false, render no footer — use for multi-step / gated confirmations inside `children`. */
   showFooter?: boolean;
 }) {
   const {
@@ -56,7 +55,7 @@ export function Modal(props: {
     <div className="fixed inset-0 z-50" role="presentation">
       <button
         type="button"
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px]"
+        className="absolute inset-0 bg-ink/20 backdrop-blur-[1px]"
         aria-label="Close dialog"
         onClick={onClose}
       />
@@ -69,23 +68,23 @@ export function Modal(props: {
           aria-describedby={description ? descId : undefined}
           tabIndex={-1}
           className={cn(
-            'w-full max-w-lg rounded-xl border border-slate-200 bg-white shadow-xl',
-            'ring-1 ring-slate-900/5 outline-none sm:max-w-2xl'
+            'w-full max-w-lg rounded-lg border border-border bg-surface shadow-card sm:max-w-2xl',
+            'outline-none ring-1 ring-ink/5'
           )}
         >
-          <div className="border-b border-slate-100 px-5 py-4">
-            <h2 id={titleId} className="text-base font-semibold text-slate-900">
+          <div className="border-b border-border-subtle px-5 py-4">
+            <h2 id={titleId} className="text-base font-semibold text-ink">
               {title}
             </h2>
             {description ? (
-              <p id={descId} className="mt-1 text-sm leading-relaxed text-slate-600">
+              <p id={descId} className="mt-1 text-sm leading-relaxed text-ink-secondary">
                 {description}
               </p>
             ) : null}
           </div>
-          <div className="max-h-[min(60vh,520px)] overflow-y-auto px-5 py-4">{children}</div>
+          <div className="max-h-[min(60vh,520px)] overflow-y-auto px-5 py-4 tc-scroll">{children}</div>
           {showFooter ? (
-            <div className="flex items-center justify-end gap-2 border-t border-slate-100 bg-slate-50/80 px-5 py-3">
+            <div className="flex items-center justify-end gap-2 border-t border-border-subtle bg-canvas-muted/50 px-5 py-3">
               <Button type="button" variant="secondary" onClick={onClose}>
                 Cancel
               </Button>

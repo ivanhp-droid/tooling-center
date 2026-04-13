@@ -38,8 +38,8 @@ export function ResultTable(props: { tool: ToolDefinition; result: ToolExecution
       subtitle="Filter by outcome and download a CSV to attach to an incident or handoff."
     >
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
-          <span className="font-medium text-slate-800">Showing</span>
+        <div className="flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
+          <span className="font-medium text-ink">Showing</span>
           <Badge tone="neutral">
             {filteredRows.length} / {result.rows.length} rows
           </Badge>
@@ -50,7 +50,7 @@ export function ResultTable(props: { tool: ToolDefinition; result: ToolExecution
           </label>
           <select
             id="result-outcome-filter"
-            className="rounded-md border border-slate-300 bg-white px-2 py-1.5 text-xs font-medium text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
+            className="rounded-md border border-border bg-surface px-2 py-1.5 text-xs font-medium text-ink shadow-card focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
             value={filter}
             onChange={(e) => setFilter(e.target.value as OutcomeFilter)}
           >
@@ -61,7 +61,7 @@ export function ResultTable(props: { tool: ToolDefinition; result: ToolExecution
           </select>
           <button
             type="button"
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-slate-50"
+            className="rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium text-ink hover:bg-canvas-muted"
             onClick={() => {
               const header = ['row_number', 'outcome', ...columns.map((c) => c.key), 'message'];
               const lines = [header.join(',')];
@@ -86,9 +86,9 @@ export function ResultTable(props: { tool: ToolDefinition; result: ToolExecution
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-md border border-slate-200">
+      <div className="overflow-x-auto rounded-md border border-border">
         <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+          <thead className="bg-canvas-muted text-left text-xs font-semibold uppercase tracking-wide text-ink-secondary">
             <tr>
               <th scope="col" className="whitespace-nowrap px-3 py-2.5">
                 #
@@ -106,35 +106,35 @@ export function ResultTable(props: { tool: ToolDefinition; result: ToolExecution
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-border-subtle">
             {filteredRows.length === 0 ? (
               <tr>
-                <td className="px-3 py-6 text-center text-sm text-slate-500" colSpan={columns.length + 3}>
+                <td className="px-3 py-6 text-center text-sm text-ink-muted" colSpan={columns.length + 3}>
                   No rows match this filter. Choose “All outcomes” or pick another outcome.
                 </td>
               </tr>
             ) : null}
             {filteredRows.map((r) => (
-              <tr key={r.rowIndex} className="hover:bg-slate-50/80">
-                <td className="whitespace-nowrap px-3 py-2 tabular-nums text-slate-500">{r.rowIndex + 1}</td>
+              <tr key={r.rowIndex} className="hover:bg-canvas-muted/80">
+                <td className="whitespace-nowrap px-3 py-2 tabular-nums text-ink-muted">{r.rowIndex + 1}</td>
                 <td className="whitespace-nowrap px-3 py-2">
                   <span
                     className={cn(
                       'inline-flex rounded-md px-2 py-0.5 text-xs font-semibold',
-                      r.outcome === 'success' && 'bg-emerald-50 text-emerald-800',
-                      r.outcome === 'failed' && 'bg-rose-50 text-rose-800',
-                      r.outcome === 'skipped' && 'bg-amber-50 text-amber-900'
+                      r.outcome === 'success' && 'bg-success-soft text-success-text',
+                      r.outcome === 'failed' && 'bg-danger-soft text-danger',
+                      r.outcome === 'skipped' && 'bg-warning-soft text-warning-text'
                     )}
                   >
                     {r.outcome}
                   </span>
                 </td>
                 {columns.map((c) => (
-                  <td key={c.key} className="max-w-[14rem] truncate px-3 py-2 font-mono text-xs text-slate-800" title={String((r.data as Record<string, unknown> | undefined)?.[c.key] ?? '')}>
+                  <td key={c.key} className="max-w-[14rem] truncate px-3 py-2 font-mono text-xs text-ink" title={String((r.data as Record<string, unknown> | undefined)?.[c.key] ?? '')}>
                     {String((r.data as Record<string, unknown> | undefined)?.[c.key] ?? '')}
                   </td>
                 ))}
-                <td className="px-3 py-2 text-slate-700">{r.message ?? '—'}</td>
+                <td className="px-3 py-2 text-ink-secondary">{r.message ?? '—'}</td>
               </tr>
             ))}
           </tbody>

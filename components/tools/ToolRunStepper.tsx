@@ -75,19 +75,19 @@ export function ToolRunStepper(props: {
         <li
           key={s.key}
           className={cn(
-            'rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm',
-            s.state === 'current' && 'border-sky-300 ring-1 ring-sky-200',
-            s.state === 'warning' && 'border-amber-300 ring-1 ring-amber-200',
-            s.state === 'blocked' && 'border-rose-200 bg-rose-50/40'
+            'rounded-lg border border-border bg-surface p-3 text-sm shadow-card',
+            s.state === 'current' && 'border-accent-border ring-1 ring-accent-border',
+            s.state === 'warning' && 'border-warning-border ring-1 ring-warning-border',
+            s.state === 'blocked' && 'border-danger-border bg-danger-soft/40'
           )}
         >
           <div className="flex items-center justify-between gap-2">
-            <span className="font-medium text-slate-900">
+            <span className="font-medium text-ink">
               {idx + 1}. {s.title}
             </span>
             <Badge tone={badgeTone(s.state)}>{badgeLabel(s.state)}</Badge>
           </div>
-          <p className="mt-1 text-xs leading-relaxed text-slate-600">{s.detail}</p>
+          <p className="mt-1 text-xs leading-relaxed text-ink-secondary">{s.detail}</p>
         </li>
       ))}
     </ol>

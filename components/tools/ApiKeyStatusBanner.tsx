@@ -14,7 +14,7 @@ export function ApiKeyStatusBanner(props: { requiresApiKey: boolean }) {
   if (!client) {
     return (
       <Card title="API access">
-        <p className="text-sm text-slate-600">Checking API key status…</p>
+        <p className="text-sm text-ink-secondary">Checking API key status…</p>
       </Card>
     );
   }
@@ -42,7 +42,7 @@ export function ApiKeyStatusBanner(props: { requiresApiKey: boolean }) {
                         ? 'Key looks invalid'
                         : 'No key'}
                 </Badge>
-                <span className="font-mono text-sm text-slate-800">{status.masked}</span>
+                <span className="font-mono text-sm text-ink">{status.masked}</span>
               </div>
               {health !== 'ok' ? (
                 <Alert variant={health === 'expired' ? 'warning' : 'error'} role="alert" title="Key check">
@@ -51,7 +51,7 @@ export function ApiKeyStatusBanner(props: { requiresApiKey: boolean }) {
                     : 'This key is too short or matches a mock “invalid” pattern. Update it in Settings—real runs will still validate server-side.'}
                 </Alert>
               ) : (
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-ink-secondary">
                   You are cleared to run tools that require authentication. Execution never logs or stores the raw key.
                 </p>
               )}
@@ -59,7 +59,7 @@ export function ApiKeyStatusBanner(props: { requiresApiKey: boolean }) {
           ) : (
             <Alert variant="warning" title="API key required" role="alert">
               Add an API key in{' '}
-              <Link className="font-medium text-slate-900 underline" href="/settings">
+              <Link className="font-medium text-ink underline" href="/settings">
                 Settings
               </Link>{' '}
               before running this tool. Runs are blocked until a key is present.
@@ -67,7 +67,7 @@ export function ApiKeyStatusBanner(props: { requiresApiKey: boolean }) {
           )}
         </div>
         <Link
-          className="inline-flex shrink-0 items-center justify-center rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50"
+          className="inline-flex shrink-0 items-center justify-center rounded-md border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas-muted"
           href="/settings"
         >
           Manage key

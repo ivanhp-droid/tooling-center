@@ -27,10 +27,10 @@ export function HistoryTable({ items }: { items: ExecutionHistoryRecord[] }) {
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm ring-1 ring-slate-900/5">
+    <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-card">
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+          <thead className="bg-canvas-muted text-left text-xs font-semibold uppercase tracking-wide text-ink-secondary">
             <tr>
               <th scope="col" className="whitespace-nowrap px-4 py-3">
                 When
@@ -61,38 +61,38 @@ export function HistoryTable({ items }: { items: ExecutionHistoryRecord[] }) {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-border-subtle">
             {items.map((h) => (
-              <tr key={h.id} className="hover:bg-slate-50/80">
-                <td className="whitespace-nowrap px-4 py-3 text-slate-700">{formatDateTime(h.timestamp)}</td>
+              <tr key={h.id} className="hover:bg-canvas-muted/80">
+                <td className="whitespace-nowrap px-4 py-3 text-ink-secondary">{formatDateTime(h.timestamp)}</td>
                 <td className="px-4 py-3">
-                  <Link className="font-medium text-sky-800 hover:text-sky-950 hover:underline" href={`/tools/${h.toolId}`}>
+                  <Link className="font-medium text-accent hover:text-accent-hover hover:underline" href={`/tools/${h.toolId}`}>
                     {h.toolName}
                   </Link>
-                  <div className="font-mono text-xs text-slate-500">{h.toolId}</div>
+                  <div className="font-mono text-xs text-ink-muted">{h.toolId}</div>
                 </td>
-                <td className="max-w-[10rem] truncate px-4 py-3 font-mono text-xs text-slate-700" title={h.csvFilename ?? ''}>
+                <td className="max-w-[10rem] truncate px-4 py-3 font-mono text-xs text-ink-secondary" title={h.csvFilename ?? ''}>
                   {h.csvFilename ?? '—'}
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 tabular-nums text-slate-800">{h.rowCount ?? '—'}</td>
+                <td className="whitespace-nowrap px-4 py-3 tabular-nums text-ink">{h.rowCount ?? '—'}</td>
                 <td className="whitespace-nowrap px-4 py-3">
                   <Badge tone={statusTone(h.status)}>{statusLabel(h.status)}</Badge>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">
-                  <span className="font-medium text-emerald-800">{h.resultSummary.success}</span>
-                  <span className="text-slate-400"> / </span>
+                <td className="whitespace-nowrap px-4 py-3 text-xs text-ink-secondary">
+                  <span className="font-medium text-success-text">{h.resultSummary.success}</span>
+                  <span className="text-ink-faint"> / </span>
                   <span>{h.resultSummary.total}</span>
-                  <span className="text-slate-400"> ok · </span>
-                  <span className="font-medium text-rose-800">{h.resultSummary.failed}</span>
-                  <span className="text-slate-400"> fail · </span>
-                  <span className="font-medium text-amber-900">{h.resultSummary.skipped}</span>
-                  <span className="text-slate-400"> skip</span>
+                  <span className="text-ink-faint"> ok · </span>
+                  <span className="font-medium text-danger">{h.resultSummary.failed}</span>
+                  <span className="text-ink-faint"> fail · </span>
+                  <span className="font-medium text-warning-text">{h.resultSummary.skipped}</span>
+                  <span className="text-ink-faint"> skip</span>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-600">{formatDurationMs(h.durationMs)}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-700">{h.auth.apiKeyUsed ? 'Yes' : 'No'}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-xs text-ink-secondary">{formatDurationMs(h.durationMs)}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-xs text-ink-secondary">{h.auth.apiKeyUsed ? 'Yes' : 'No'}</td>
                 <td className="whitespace-nowrap px-4 py-3">
                   <Link
-                    className="font-medium text-sky-800 hover:text-sky-950 hover:underline"
+                    className="font-medium text-accent hover:text-accent-hover hover:underline"
                     href={`/history/${h.id}`}
                   >
                     View

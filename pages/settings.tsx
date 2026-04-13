@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useClient } from '@/lib/hooks/useClient';
 import { AdminLayout } from '@/components/layout/AdminLayout';
-import { PageHeader } from '@/components/layout/PageHeader';
 import { apiKeyStore, classifyApiKey } from '@/lib/storage/apiKeyStore';
 import { ApiKeyInput } from '@/components/tools/ApiKeyInput';
 import { Card } from '@/components/common/Card';
@@ -34,18 +33,16 @@ export default function SettingsPage() {
   }
 
   return (
-    <AdminLayout>
-      <PageHeader
-        title="Settings"
-        subtitle="Session configuration for Tooling Center. Nothing here leaves your machine except real API calls when you wire them up."
-      />
-
+    <AdminLayout
+      title="Settings"
+      subtitle="Session configuration for Tooling Center. Nothing here leaves your machine except real API calls when you wire them up."
+    >
       <div className="max-w-2xl space-y-6">
         <Card title="API key" subtitle="Required for tools that call authenticated endpoints.">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle pb-4">
             <div>
-              <div className="text-sm font-medium text-slate-900">Status</div>
-              <div className="mt-1 text-xs text-slate-600">Local check only — production still validates server-side.</div>
+              <div className="text-sm font-medium text-ink">Status</div>
+              <div className="mt-1 text-xs text-ink-secondary">Local check only — production still validates server-side.</div>
             </div>
             <Badge
               tone={!present ? 'warning' : health === 'ok' ? 'success' : health === 'expired' ? 'warning' : 'danger'}
@@ -57,7 +54,7 @@ export default function SettingsPage() {
           <div className="pt-4">
             <ApiKeyInput onSave={onSave} onClear={onClear} present={present} />
             {savedMsg ? (
-              <p className="mt-3 text-sm text-emerald-800" role="status">
+              <p className="mt-3 text-sm text-success-text" role="status">
                 {savedMsg}
               </p>
             ) : null}

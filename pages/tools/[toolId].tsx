@@ -58,14 +58,14 @@ export default function ToolPage() {
     return (
       <AdminLayout>
         <Card title="Tool not found">
-          <p className="text-sm text-slate-700">
+          <p className="text-sm text-ink-secondary">
             No tool matches <span className="font-mono">{toolId || '(missing id)'}</span>. Return to the catalog and
             pick a tool from the list.
           </p>
           <div className="mt-4">
             <Link
               href="/"
-              className="inline-flex rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50"
+              className="inline-flex rounded-md border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas-muted"
             >
               ← Back to catalog
             </Link>
@@ -147,28 +147,28 @@ export default function ToolPage() {
   }
 
   const confirmBody = (
-    <div className="space-y-3 text-sm text-slate-800">
+    <div className="space-y-3 text-sm text-ink">
       <div className="grid gap-2 sm:grid-cols-2">
         <div>
-          <div className="text-xs font-medium uppercase tracking-wide text-slate-500">Tool</div>
-          <div className="font-medium text-slate-900">{activeTool.name}</div>
+          <div className="text-xs font-medium uppercase tracking-wide text-ink-muted">Tool</div>
+          <div className="font-medium text-ink">{activeTool.name}</div>
         </div>
         <div>
-          <div className="text-xs font-medium uppercase tracking-wide text-slate-500">CSV file</div>
+          <div className="text-xs font-medium uppercase tracking-wide text-ink-muted">CSV file</div>
           <div className="font-mono text-sm">{csv?.filename ?? '—'}</div>
         </div>
         <div>
-          <div className="text-xs font-medium uppercase tracking-wide text-slate-500">Rows in file</div>
+          <div className="text-xs font-medium uppercase tracking-wide text-ink-muted">Rows in file</div>
           <div>{csv?.rowCount ?? 0}</div>
         </div>
         <div>
-          <div className="text-xs font-medium uppercase tracking-wide text-slate-500">API key</div>
+          <div className="text-xs font-medium uppercase tracking-wide text-ink-muted">API key</div>
           <div>{activeTool.requiresApiKey ? (apiKeyOk ? 'Present (mock-valid)' : 'Missing or invalid') : 'Not required'}</div>
         </div>
       </div>
       {activeTool.helpText?.reversibility ? (
-        <div className="rounded-md border border-slate-200 bg-slate-50 p-2 text-xs text-slate-700">
-          <span className="font-semibold text-slate-900">Reversibility: </span>
+        <div className="rounded-md border border-border bg-canvas-muted p-2 text-xs text-ink-secondary">
+          <span className="font-semibold text-ink">Reversibility: </span>
           {activeTool.helpText.reversibility}
         </div>
       ) : null}
@@ -196,17 +196,17 @@ export default function ToolPage() {
           >
             <div className="space-y-4">
               {activeTool.helpText?.overview ? (
-                <p className="text-sm leading-relaxed text-slate-700">{activeTool.helpText.overview}</p>
+                <p className="text-sm leading-relaxed text-ink-secondary">{activeTool.helpText.overview}</p>
               ) : null}
 
               <div className="flex flex-wrap items-end justify-between gap-3">
-                <div className="text-xs text-slate-600">
-                  <span className="font-medium text-slate-800">Expected columns: </span>
+                <div className="text-xs text-ink-secondary">
+                  <span className="font-medium text-ink">Expected columns: </span>
                   <span className="font-mono">{activeTool.csvSchema.columns.map((c) => c.key).join(', ')}</span>
                 </div>
                 {activeTool.csvSchema.templateCsv ? (
                   <a
-                    className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50"
+                    className="inline-flex items-center rounded-md border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas-muted"
                     href={`data:text/csv;charset=utf-8,${encodeURIComponent(activeTool.csvSchema.templateCsv.content)}`}
                     download={activeTool.csvSchema.templateCsv.filename}
                   >
@@ -235,7 +235,7 @@ export default function ToolPage() {
               />
 
               {csvParsing ? (
-                <div className="flex items-center gap-2 text-sm text-slate-600">
+                <div className="flex items-center gap-2 text-sm text-ink-secondary">
                   <Spinner label="Parsing CSV" />
                   Parsing and validating CSV…
                 </div>
@@ -250,7 +250,7 @@ export default function ToolPage() {
 
               {csv ? (
                 <>
-                  <div className="flex flex-wrap items-center gap-2 text-sm text-slate-700">
+                  <div className="flex flex-wrap items-center gap-2 text-sm text-ink-secondary">
                     <Badge tone="neutral">File: {csv.filename}</Badge>
                     <Badge tone={csv.rowCount > 0 ? 'success' : 'warning'}>
                       {csv.rowCount} data {csv.rowCount === 1 ? 'row' : 'rows'}
@@ -332,13 +332,13 @@ export default function ToolPage() {
                 )}
               </Button>
               <Link
-                className="text-sm font-medium text-slate-700 underline decoration-slate-300 underline-offset-2 hover:text-slate-900 hover:decoration-slate-500"
+                className="text-sm font-medium text-accent underline decoration-border underline-offset-2 hover:text-accent-hover hover:decoration-accent-hover"
                 href="/history"
               >
                 View history
               </Link>
             </div>
-            <p className="text-xs leading-relaxed text-slate-500">
+            <p className="text-xs leading-relaxed text-ink-muted">
               The Run button stays disabled while a run is in progress so you cannot double-submit by accident.
             </p>
           </div>

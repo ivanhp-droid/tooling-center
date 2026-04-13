@@ -14,7 +14,7 @@ export function CsvValidationSummary(props: { parse: CsvParseResult | null; sche
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="text-sm font-semibold text-slate-900">Validation</div>
+        <div className="text-sm font-semibold text-ink">Validation</div>
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone={hasErrors ? 'danger' : hasWarnings ? 'warning' : 'success'}>
             {hasErrors ? 'Blocking issues' : hasWarnings ? 'OK with warnings' : 'Ready'}
@@ -24,8 +24,8 @@ export function CsvValidationSummary(props: { parse: CsvParseResult | null; sche
       </div>
 
       {schema ? (
-        <p className="text-xs text-slate-600">
-          <span className="font-medium text-slate-800">Required columns: </span>
+        <p className="text-xs text-ink-secondary">
+          <span className="font-medium text-ink">Required columns: </span>
           <span className="font-mono">
             {schema.columns.filter((c) => c.required).map((c) => c.key).join(', ') || '—'}
           </span>
@@ -45,7 +45,7 @@ export function CsvValidationSummary(props: { parse: CsvParseResult | null; sche
             ))}
           </ul>
           {errors.length > 12 ? (
-            <p className="mt-2 text-xs text-slate-700">Showing first 12 errors — fix them, re-upload, and validate again.</p>
+            <p className="mt-2 text-xs text-ink-secondary">Showing first 12 errors — fix them, re-upload, and validate again.</p>
           ) : null}
         </Alert>
       ) : (
@@ -63,7 +63,7 @@ export function CsvValidationSummary(props: { parse: CsvParseResult | null; sche
               <li key={idx}>{w.message}</li>
             ))}
           </ul>
-          {warnings.length > 8 ? <p className="mt-2 text-xs text-slate-800">Showing first 8 warnings.</p> : null}
+          {warnings.length > 8 ? <p className="mt-2 text-xs text-ink">Showing first 8 warnings.</p> : null}
         </Alert>
       ) : null}
     </div>

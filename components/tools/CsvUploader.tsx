@@ -76,18 +76,18 @@ export function CsvUploader(props: {
         }}
         className={cn(
           'rounded-lg border-2 border-dashed px-4 py-8 text-center transition-colors',
-          disabled ? 'cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400' : 'cursor-pointer',
-          !disabled && isDragging && 'border-sky-400 bg-sky-50',
-          !disabled && !isDragging && 'border-slate-300 bg-white hover:border-slate-400 hover:bg-slate-50/80'
+          disabled ? 'cursor-not-allowed border-border bg-canvas-muted text-ink-faint' : 'cursor-pointer',
+          !disabled && isDragging && 'border-accent bg-accent-soft',
+          !disabled && !isDragging && 'border-border bg-surface hover:border-border hover:bg-canvas-muted/80'
         )}
         onClick={() => {
           if (!disabled) inputRef.current?.click();
         }}
       >
-        <div className="text-sm font-medium text-slate-900">
+        <div className="text-sm font-medium text-ink">
           {isDragging ? 'Drop CSV here' : 'Drag and drop a CSV here'}
         </div>
-        <div className="mt-1 text-xs text-slate-600">or use the button below — UTF-8 `.csv` exports work best</div>
+        <div className="mt-1 text-xs text-ink-secondary">or use the button below — UTF-8 `.csv` exports work best</div>
         <div className="mt-4 flex justify-center">
           <Button
             type="button"
@@ -104,11 +104,11 @@ export function CsvUploader(props: {
       </div>
 
       {filename ? (
-        <p className="text-sm text-slate-700">
-          Loaded file: <span className="font-mono font-medium text-slate-900">{filename}</span>
+        <p className="text-sm text-ink-secondary">
+          Loaded file: <span className="font-mono font-medium text-ink">{filename}</span>
         </p>
       ) : (
-        <p className="text-xs text-slate-500">Maximum practical size in-browser: keep files under a few MB for smooth preview.</p>
+        <p className="text-xs text-ink-muted">Maximum practical size in-browser: keep files under a few MB for smooth preview.</p>
       )}
     </div>
   );

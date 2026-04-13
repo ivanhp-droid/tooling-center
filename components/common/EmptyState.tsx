@@ -11,13 +11,13 @@ export function EmptyState(props: {
   return (
     <div
       className={cn(
-        'rounded-lg border border-dashed border-slate-300 bg-slate-50/80 px-6 py-10 text-center',
+        'rounded-lg border border-dashed border-border bg-surface px-8 py-12 text-center shadow-card',
         className
       )}
     >
-      <div className="text-sm font-semibold text-slate-900">{title}</div>
-      {description ? <div className="mx-auto mt-2 max-w-md text-sm text-slate-600">{description}</div> : null}
-      {action ? <div className="mt-4 flex justify-center">{action}</div> : null}
+      <div className="text-sm font-semibold text-ink">{title}</div>
+      {description ? <div className="mx-auto mt-2 max-w-md text-sm text-ink-secondary">{description}</div> : null}
+      {action ? <div className="mt-5 flex justify-center">{action}</div> : null}
     </div>
   );
 }

@@ -4,6 +4,8 @@ import { useClient } from '@/lib/hooks/useClient';
 import { Button } from '@/components/common/Button';
 import { Badge } from '@/components/common/Badge';
 import { Alert } from '@/components/common/Alert';
+import { cn } from '@/lib/utils/cn';
+import { inputBaseClass } from '@/components/ui/formClasses';
 
 export function ApiKeyInput(props: {
   present: boolean;
@@ -20,9 +22,9 @@ export function ApiKeyInput(props: {
   return (
     <div className="space-y-3">
       {present && masked ? (
-        <div className="flex flex-wrap items-center gap-2 text-sm text-slate-700">
-          <span className="text-slate-600">Saved key:</span>
-          <span className="font-mono text-slate-900">{masked}</span>
+        <div className="flex flex-wrap items-center gap-2 text-sm text-ink-secondary">
+          <span className="text-ink-secondary">Saved key:</span>
+          <span className="font-mono text-ink">{masked}</span>
           <Badge tone={health === 'ok' ? 'success' : health === 'expired' ? 'warning' : 'danger'}>
             {health === 'ok' ? 'Passes local check' : health === 'expired' ? 'Expired / revoked (mock)' : 'Invalid format'}
           </Badge>
@@ -35,7 +37,7 @@ export function ApiKeyInput(props: {
         </label>
         <input
           id="settings-api-key"
-          className="min-w-0 flex-1 rounded-md border border-slate-300 px-3 py-2 font-mono text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
+          className={cn('min-w-0 flex-1 font-mono', inputBaseClass)}
           type="password"
           placeholder="Paste API key (never shared or logged)"
           autoComplete="off"

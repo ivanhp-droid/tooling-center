@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { AdminLayout } from '@/components/layout/AdminLayout';
-import { PageHeader } from '@/components/layout/PageHeader';
 import { listHistory, clearHistory, type ExecutionHistoryRecord } from '@/lib/storage/historyStore';
 import { HistoryTable } from '@/components/tools/HistoryTable';
 import { Button } from '@/components/common/Button';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Badge } from '@/components/common/Badge';
+import { FilterBar } from '@/components/ui/FilterBar';
+import { inputBaseClass } from '@/components/ui/formClasses';
+import { cn } from '@/lib/utils/cn';
 
 type StatusFilter = 'all' | ExecutionHistoryRecord['status'];
 
@@ -29,25 +31,23 @@ export default function HistoryPage() {
   }, [items, query, status]);
 
   return (
-    <AdminLayout>
-      <PageHeader
-        title="Execution history"
-        subtitle="Runs from this browser only. Use filters to find a past job, then open details for a sanitized input snapshot."
-        actions={
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => {
-              if (typeof window !== 'undefined' && !window.confirm('Clear all history on this device?')) return;
-              clearHistory();
-              setItems(listHistory());
-            }}
-          >
-            Clear history
-          </Button>
-        }
-      />
-
+    <AdminLayout
+      title="Execution history"
+      subtitle="Runs from this browser only. Filter the table, then open a row for a sanitized input snapshot."
+      titleActions={
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => {
+            if (typeof window !== 'undefined' && !window.confirm('Clear all history on this device?')) return;
+            clearHistory();
+            setItems(listHistory());
+          }}
+        >
+          Clear history
+        </Button>
+      }
+    >
       {items.length === 0 ? (
         <EmptyState
           title="No runs yet"
@@ -55,7 +55,7 @@ export default function HistoryPage() {
           action={
             <Link
               href="/"
-              className="inline-flex rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50"
+              className="inline-flex rounded-md border border-border bg-surface px-3 py-2 text-sm font-medium text-ink-secondary shadow-card hover:bg-canvas-muted hover:text-ink"
             >
               Go to dashboard
             </Link>
@@ -63,9 +63,9 @@ export default function HistoryPage() {
         />
       ) : (
         <div className="space-y-4">
-          <div className="flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
+          <FilterBar>
             <div className="min-w-0 flex-1">
-              <label htmlFor="hist-search" className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              <label htmlFor="hist-search" className="text-xs font-medium uppercase tracking-wide text-ink-faint">
                 Search
               </label>
               <input
@@ -74,18 +74,18 @@ export default function HistoryPage() {
                 placeholder="Tool name, id, or CSV file…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
+                className={cn('mt-1', inputBaseClass)}
               />
             </div>
-            <div>
-              <label htmlFor="hist-status" className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            <div className="w-full sm:w-48">
+              <label htmlFor="hist-status" className="text-xs font-medium uppercase tracking-wide text-ink-faint">
                 Status
               </label>
               <select
                 id="hist-status"
                 value={status}
                 onChange={(e) => setStatus(e.target.value as StatusFilter)}
-                className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 sm:w-48"
+                className={cn('mt-1', inputBaseClass, 'bg-surface')}
               >
                 <option value="all">All statuses</option>
                 <option value="success">Success</option>
@@ -93,9 +93,9 @@ export default function HistoryPage() {
                 <option value="failed">Failed</option>
               </select>
             </div>
-          </div>
+          </FilterBar>
 
-          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
             <span>Showing</span>
             <Badge tone="neutral">
               {filtered.length} / {items.length}
