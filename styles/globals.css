@@ -4,8 +4,32 @@
 
 :root {
   color-scheme: light;
+  /* Snorkel-style portal tokens (fallbacks; Inter metrics set via next/font) */
+  --tc-radius: 0.5rem;
+  --tc-radius-sm: 0.375rem;
 }
 
-html, body {
+html,
+body {
   height: 100%;
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply bg-canvas font-sans text-ink;
+  }
+  :focus-visible {
+    @apply rounded-sm outline outline-2 outline-offset-2 outline-accent;
+  }
+}
+
+/* Subtle scrollbar for admin tables */
+@layer utilities {
+  .tc-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(215 14% 78%) transparent;
+  }
 }

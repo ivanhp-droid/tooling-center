@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
+import { cn } from '@/lib/utils/cn';
 
-type Variant = 'primary' | 'secondary' | 'danger';
+type Variant = 'primary' | 'secondary' | 'danger' | 'ghost';
 
 export function Button(
   props: PropsWithChildren<
@@ -12,14 +13,15 @@ export function Button(
 ) {
   const { className = '', variant = 'primary', fullWidth, ...rest } = props;
   const base =
-    'inline-flex items-center justify-center rounded border px-3 py-2 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center rounded-md border px-3.5 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:border-border-subtle disabled:bg-canvas-muted disabled:text-ink-faint';
   const styles =
     variant === 'primary'
-      ? 'border-slate-900 bg-slate-900 text-white hover:bg-slate-800'
+      ? 'border-accent bg-accent text-white shadow-card hover:border-accent-hover hover:bg-accent-hover focus-visible:ring-accent'
       : variant === 'danger'
-        ? 'border-red-600 bg-red-600 text-white hover:bg-red-500'
-        : 'border-slate-300 bg-white text-slate-900 hover:bg-slate-50';
+        ? 'border-danger-border bg-danger-soft text-danger shadow-card hover:bg-rose-100'
+        : variant === 'ghost'
+          ? 'border-transparent bg-transparent text-ink-secondary hover:bg-canvas-muted hover:text-ink'
+          : 'border-border bg-surface text-ink shadow-card hover:bg-canvas-muted';
   const width = fullWidth ? ' w-full' : '';
-  return <button className={`${base} ${styles}${width} ${className}`} {...rest} />;
+  return <button className={cn(base, styles, width, className)} {...rest} />;
 }
-

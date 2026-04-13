@@ -7,10 +7,14 @@ export type ExecutionHistoryRecord = {
   toolId: string;
   toolName: string;
   timestamp: string;
+  auth: {
+    apiKeyUsed: boolean;
+  };
   csvFilename?: string;
   rowCount?: number;
   inputSummary: Record<string, unknown>;
   status: ExecutionHistoryStatus;
+  durationMs?: number;
   resultSummary: {
     total: number;
     success: number;
@@ -40,5 +44,10 @@ export function addHistoryRecord(record: Omit<ExecutionHistoryRecord, 'id'>): Ex
 
 export function clearHistory() {
   writeJson(HISTORY_KEY, []);
+}
+
+export function getHistoryById(id: string): ExecutionHistoryRecord | null {
+  const items = readJson<ExecutionHistoryRecord[]>(HISTORY_KEY, []);
+  return items.find((i) => i.id === id) ?? null;
 }
 
