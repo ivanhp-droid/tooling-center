@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+        sans: ['Arial', 'ui-sans-serif', 'system-ui', 'sans-serif']
       },
       colors: {
         /** Snorkel-inspired portal neutrals */
