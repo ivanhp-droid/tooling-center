@@ -114,8 +114,8 @@ export function ResultTable(props: { tool: ToolDefinition; result: ToolExecution
                 </td>
               </tr>
             ) : null}
-            {filteredRows.map((r) => (
-              <tr key={r.rowIndex} className="hover:bg-canvas-muted/80">
+            {filteredRows.map((r, idx) => (
+              <tr key={`${r.rowIndex}-${idx}`} className="hover:bg-canvas-muted/80">
                 <td className="whitespace-nowrap px-3 py-2 tabular-nums text-ink-muted">{r.rowIndex + 1}</td>
                 <td className="whitespace-nowrap px-3 py-2">
                   <span

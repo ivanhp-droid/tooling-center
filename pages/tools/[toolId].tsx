@@ -40,11 +40,24 @@ export default function ToolPage() {
   const [result, setResult] = useState<Awaited<ReturnType<NonNullable<typeof tool>['execute']>> | null>(null);
   const client = useClient();
 
+  const effectiveFieldValues = useMemo(() => {
+    if (!tool) return {};
+    return (tool.additionalFields ?? []).reduce<Record<string, unknown>>((acc, field) => {
+      const explicitValue = fields[field.key];
+      if (explicitValue !== undefined) {
+        acc[field.key] = explicitValue;
+      } else if (field.defaultValue !== undefined) {
+        acc[field.key] = field.defaultValue;
+      }
+      return acc;
+    }, {});
+  }, [tool, fields]);
+
   const additionalFieldsOk = useMemo(() => {
     if (!tool) return true;
     for (const f of tool.additionalFields ?? []) {
       if (!f.required) continue;
-      const v = fields[f.key];
+      const v = effectiveFieldValues[f.key];
       if (f.type === 'checkbox') {
         if (typeof v !== 'boolean') return false;
         continue;
@@ -52,7 +65,7 @@ export default function ToolPage() {
       if (v === undefined || v === null || String(v).trim() === '') return false;
     }
     return true;
-  }, [tool, fields]);
+  }, [tool, effectiveFieldValues]);
 
   if (!tool) {
     return (
@@ -109,7 +122,7 @@ export default function ToolPage() {
       const exec = await activeTool.execute({
         apiKey,
         csv: csv ? { filename: csv.filename, rowCount: csv.rowCount, rows: csv.rows } : undefined,
-        fields
+        fields: effectiveFieldValues
       });
       setResult(exec);
       addHistoryRecord({
@@ -122,7 +135,7 @@ export default function ToolPage() {
         inputSummary: buildHistoryInputSummary({
           apiKey,
           csv: csv ? { filename: csv.filename, rowCount: csv.rowCount, rows: csv.rows } : undefined,
-          fields
+          fields: effectiveFieldValues
         }),
         status: exec.status,
         durationMs: exec.durationMs,
@@ -165,6 +178,12 @@ export default function ToolPage() {
           <div className="text-xs font-medium uppercase tracking-wide text-ink-muted">API key</div>
           <div>{activeTool.requiresApiKey ? (apiKeyOk ? 'Present (mock-valid)' : 'Missing or invalid') : 'Not required'}</div>
         </div>
+        {'env' in effectiveFieldValues ? (
+          <div>
+            <div className="text-xs font-medium uppercase tracking-wide text-ink-muted">Environment</div>
+            <div className="font-mono">{String(effectiveFieldValues.env ?? 'staging')}</div>
+          </div>
+        ) : null}
       </div>
       {activeTool.helpText?.reversibility ? (
         <div className="rounded-md border border-border bg-canvas-muted p-2 text-xs text-ink-secondary">
@@ -203,6 +222,13 @@ export default function ToolPage() {
                 <div className="text-xs text-ink-secondary">
                   <span className="font-medium text-ink">Expected columns: </span>
                   <span className="font-mono">{activeTool.csvSchema.columns.map((c) => c.key).join(', ')}</span>
+                  {activeTool.csvSchema.dynamicColumnPrefixes && activeTool.csvSchema.dynamicColumnPrefixes.length > 0 ? (
+                    <>
+                      {' '}
+                      + one or more columns starting with{' '}
+                      <span className="font-mono">{activeTool.csvSchema.dynamicColumnPrefixes.join(', ')}</span>
+                    </>
+                  ) : null}
                 </div>
                 {activeTool.csvSchema.templateCsv ? (
                   <a
@@ -276,6 +302,11 @@ export default function ToolPage() {
               values={fields}
               onChange={setFields}
             />
+            {activeTool.id === 'remove-tags-from-users' && String(effectiveFieldValues.env ?? 'staging') === 'prod' ? (
+              <Alert variant="warning" className="mt-4" title="Production selected" role="alert">
+                This run targets production and can remove live user tags. Validate in staging first whenever possible.
+              </Alert>
+            ) : null}
             {!additionalFieldsOk ? (
               <Alert variant="warning" className="mt-4" title="Required fields missing" role="alert">
                 Fill all required fields above before running. Required items are marked in the form.
@@ -289,6 +320,12 @@ export default function ToolPage() {
           subtitle="Execution uses the mock service in this build. Results and history stay in this browser."
         >
           <div className="space-y-4">
+            {activeTool.id === 'remove-tags-from-users' ? (
+              <Alert variant="warning" title="High-risk action" role="status">
+                This action removes user tags and may affect project access, routing, segmentation, or reporting. Use
+                staging first whenever possible. Production runs require confirmation.
+              </Alert>
+            ) : null}
             {!apiKeyOk && activeTool.requiresApiKey ? (
               <Alert variant="error" title="Cannot run yet" role="alert">
                 {apiKeyStatus.present && apiKeyHealth !== 'ok'

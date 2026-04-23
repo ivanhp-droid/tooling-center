@@ -207,6 +207,107 @@ export const toolCatalog: ToolDefinition[] = [
     execute: toolsExecutors.assignUserToProject
   },
   {
+    id: 'remove-tags-from-users',
+    name: 'Remove Tags from Users',
+    description: 'Remove one or more project-specific tags from users using email, project name, and tag values.',
+    category: TOOL_CATEGORY_USER,
+    riskLevel: 'high',
+    requiresApiKey: true,
+    requiresCsv: true,
+    csvSchema: {
+      allowUnknownColumns: false,
+      unknownColumnsSeverity: 'warning',
+      keyColumns: ['email', 'project_name'],
+      keyColumnsIncludeDynamicPrefixes: true,
+      dynamicColumnPrefixes: ['tag'],
+      requireAtLeastOneDynamicColumn: true,
+      requireAtLeastOneValueInDynamicColumnsPerRow: true,
+      notes: [
+        'Provide email and project_name on every row.',
+        'Add one or more tag columns (for example: tag, tag_1, tag_2, tag_to_remove).',
+        'Tags are removed only when both tag value and project name match existing user tags.',
+        'Empty tag cells are ignored.'
+      ],
+      templateCsv: {
+        filename: 'remove-tags-from-users.template.csv',
+        content: [
+          'email,project_name,tag_1,tag_2,tag_3',
+          'user@example.com,Project Swordfish,reviewer,priority-submitters,bpo-fermatix',
+          'another.user@example.com,Project Swordfish,needs-training,,'
+        ].join('\n')
+      },
+      columns: [
+        {
+          key: 'email',
+          label: 'Email',
+          required: true,
+          type: 'string',
+          description: 'User email address. It will be normalized to lowercase during execution.',
+          example: 'user@example.com',
+          pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$'
+        },
+        {
+          key: 'project_name',
+          label: 'Project name',
+          required: true,
+          type: 'string',
+          description: 'Project name that the tag is associated with.',
+          example: 'Project Swordfish'
+        }
+      ]
+    },
+    additionalFields: [
+      {
+        key: 'env',
+        label: 'Environment',
+        type: 'select',
+        required: true,
+        options: [
+          { label: 'staging', value: 'staging' },
+          { label: 'prod', value: 'prod' }
+        ],
+        defaultValue: 'staging',
+        helpText: 'Use staging first whenever possible. Production removes real user tags.'
+      },
+      {
+        key: 'dryRun',
+        label: 'Dry run',
+        type: 'checkbox',
+        helpText: 'Preview what would be removed without deleting anything.',
+        defaultValue: true
+      }
+    ],
+    helpText: {
+      overview:
+        'This tool removes tags from users. A tag is removed only when both the tag value and project name match. The CSV can include multiple tag columns, and empty tag cells are ignored.',
+      csvTips: [
+        'Accepted dynamic columns are any headers that start with `tag`.',
+        'Rows without `email`, `project_name`, or any non-empty tag value are blocked before run.',
+        'Use staging first whenever possible.',
+        'Production runs require confirmation.'
+      ],
+      reversibility: 'Tag removals can impact access, routing, segmentation, and reporting. Re-applying tags later may not fully restore behavior.'
+    },
+    confirmation: {
+      mode: 'strong',
+      strongRequiresCheckbox: true,
+      strongRequiresTyped: 'CONFIRM',
+      warningText:
+        'This action removes user tags and may affect project access, routing, segmentation, or reporting. Use staging first whenever possible. Production runs require confirmation.'
+    },
+    output: {
+      columns: [
+        { key: 'email', label: 'Email' },
+        { key: 'project_name', label: 'Project Name' },
+        { key: 'tag', label: 'Tag' },
+        { key: 'status', label: 'Status' },
+        { key: 'message', label: 'Message' },
+        { key: 'environment', label: 'Environment' }
+      ]
+    },
+    execute: toolsExecutors.removeTagsFromUsers
+  },
+  {
     id: 'remove-user-from-project',
     name: 'Remove User from Project',
     description: 'Bulk remove users from projects.',

@@ -6,6 +6,7 @@ export function CsvSchemaDetails(props: { schema: CsvSchema }) {
   const { schema } = props;
   const required = schema.columns.filter((c) => c.required);
   const optional = schema.columns.filter((c) => !c.required);
+  const dynamicPrefixes = schema.dynamicColumnPrefixes ?? [];
 
   return (
     <div className="rounded-lg border border-border bg-canvas-muted/50 p-4">
@@ -34,6 +35,22 @@ export function CsvSchemaDetails(props: { schema: CsvSchema }) {
                 <li key={i}>{n}</li>
               ))}
             </ul>
+          </div>
+        ) : null}
+
+        {dynamicPrefixes.length > 0 ? (
+          <div className="rounded-md border border-border bg-surface p-3">
+            <div className="text-xs font-semibold uppercase tracking-wide text-ink-muted">Dynamic columns</div>
+            <p className="mt-2 text-sm text-ink-secondary">
+              Any column starting with <span className="font-mono">{dynamicPrefixes.join(', ')}</span> is treated as a
+              valid dynamic column.
+            </p>
+            {schema.requireAtLeastOneDynamicColumn ? (
+              <p className="mt-1 text-xs text-ink-secondary">At least one dynamic column is required in the CSV header.</p>
+            ) : null}
+            {schema.requireAtLeastOneValueInDynamicColumnsPerRow ? (
+              <p className="mt-1 text-xs text-ink-secondary">Each row must include at least one non-empty dynamic value.</p>
+            ) : null}
           </div>
         ) : null}
 

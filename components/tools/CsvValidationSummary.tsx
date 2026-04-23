@@ -24,12 +24,18 @@ export function CsvValidationSummary(props: { parse: CsvParseResult | null; sche
       </div>
 
       {schema ? (
-        <p className="text-xs text-ink-secondary">
-          <span className="font-medium text-ink">Required columns: </span>
-          <span className="font-mono">
-            {schema.columns.filter((c) => c.required).map((c) => c.key).join(', ') || '—'}
-          </span>
-        </p>
+        <div className="space-y-1 text-xs text-ink-secondary">
+          <p>
+            <span className="font-medium text-ink">Required columns: </span>
+            <span className="font-mono">{schema.columns.filter((c) => c.required).map((c) => c.key).join(', ') || '—'}</span>
+          </p>
+          {schema.dynamicColumnPrefixes && schema.dynamicColumnPrefixes.length > 0 ? (
+            <p>
+              <span className="font-medium text-ink">Dynamic column prefixes: </span>
+              <span className="font-mono">{schema.dynamicColumnPrefixes.join(', ')}</span>
+            </p>
+          ) : null}
+        </div>
       ) : null}
 
       {hasErrors ? (
