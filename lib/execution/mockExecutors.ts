@@ -44,8 +44,8 @@ function makeAuthFailure(total: number): ToolExecutionResult {
   return buildResult({ total, rows, startedAt, finishedAt });
 }
 
-function keyOf(row: Record<string, string>, keys: string[]) {
-  return keys.map((k) => (row[k] ?? '').trim()).join('::');
+function isTagHeader(header: string) {
+  return header.trim().toLowerCase().startsWith('tag');
 }
 
 export async function executeAddUserTags(input: ToolExecutionInput): Promise<ToolExecutionResult> {
@@ -352,6 +352,149 @@ export async function executeUpdateTaskState(input: ToolExecutionInput): Promise
   return buildResult({ total: rows.length, rows, startedAt, finishedAt });
 }
 
+export async function executeRemoveTagsFromUsers(input: ToolExecutionInput): Promise<ToolExecutionResult> {
+  const startedAt = nowIso();
+  await simulateLatency(700);
+  const csvRows = input.csv?.rows ?? [];
+  if (isAuthBad(input.apiKey)) return makeAuthFailure(csvRows.length);
+
+  const environment = String(input.fields.env ?? 'staging').trim() || 'staging';
+  const dryRun = Boolean(input.fields.dryRun ?? true);
+  const tagHeaders = csvRows.length > 0 ? Object.keys(csvRows[0]).filter(isTagHeader) : [];
+
+  const rows: ToolExecutionRowResult[] = [];
+  let emittedRowIndex = 0;
+
+  for (const csvRow of csvRows) {
+    const normalizedEmail = String(csvRow.email ?? '').trim().toLowerCase();
+    const projectName = String(csvRow.project_name ?? '').trim();
+    const tags = tagHeaders.map((header) => String(csvRow[header] ?? '').trim()).filter((tag) => tag.length > 0);
+
+    if (!normalizedEmail) {
+      rows.push({
+        rowIndex: emittedRowIndex++,
+        outcome: 'failed',
+        message: 'Missing required email; row skipped.',
+        data: {
+          email: '',
+          project_name: projectName,
+          tag: '',
+          status: 'failed',
+          message: 'Missing required email',
+          environment
+        }
+      });
+      continue;
+    }
+
+    if (!projectName) {
+      rows.push({
+        rowIndex: emittedRowIndex++,
+        outcome: 'failed',
+        message: 'Missing required project_name; row skipped.',
+        data: {
+          email: normalizedEmail,
+          project_name: '',
+          tag: '',
+          status: 'failed',
+          message: 'Missing required project_name',
+          environment
+        }
+      });
+      continue;
+    }
+
+    if (tags.length === 0) {
+      rows.push({
+        rowIndex: emittedRowIndex++,
+        outcome: 'skipped',
+        message: 'No tag values specified in tag* columns.',
+        data: {
+          email: normalizedEmail,
+          project_name: projectName,
+          tag: '',
+          status: 'skipped',
+          message: 'No tags specified',
+          environment
+        }
+      });
+      continue;
+    }
+
+    const userNotFound = normalizedEmail.endsWith('000@example.com') || normalizedEmail.includes('notfound');
+    for (const tagValue of tags) {
+      if (userNotFound) {
+        rows.push({
+          rowIndex: emittedRowIndex++,
+          outcome: 'failed',
+          message: `User ${normalizedEmail} not found.`,
+          data: {
+            email: normalizedEmail,
+            project_name: projectName,
+            tag: tagValue,
+            status: 'failed',
+            message: 'User not found',
+            environment
+          }
+        });
+        continue;
+      }
+
+      const tagNormalized = tagValue.toLowerCase();
+      if (tagNormalized.includes('missing') || tagNormalized.includes('not-found')) {
+        rows.push({
+          rowIndex: emittedRowIndex++,
+          outcome: 'skipped',
+          message: `Tag "${tagValue}" not found for project "${projectName}".`,
+          data: {
+            email: normalizedEmail,
+            project_name: projectName,
+            tag: tagValue,
+            status: 'skipped',
+            message: 'Tag not found for this project',
+            environment
+          }
+        });
+        continue;
+      }
+
+      if (dryRun) {
+        rows.push({
+          rowIndex: emittedRowIndex++,
+          outcome: 'skipped',
+          message: `Dry run: tag "${tagValue}" would be removed from ${normalizedEmail} in "${projectName}".`,
+          data: {
+            email: normalizedEmail,
+            project_name: projectName,
+            tag: tagValue,
+            status: 'dry_run',
+            message: 'Would remove tag (dry run; no deletion performed)',
+            environment
+          }
+        });
+        continue;
+      }
+
+      rows.push({
+        rowIndex: emittedRowIndex++,
+        outcome: 'success',
+        message: `Removed tag "${tagValue}" from ${normalizedEmail} in "${projectName}".`,
+        data: {
+          email: normalizedEmail,
+          project_name: projectName,
+          tag: tagValue,
+          status: 'success',
+          message: 'Tag removed',
+          environment
+        }
+      });
+    }
+  }
+
+  const finishedAt = nowIso();
+  return buildResult({ total: rows.length, rows, startedAt, finishedAt });
+}
+
 export async function runMockExecution(args: { toolId: string; input: ToolExecutionInput }): Promise<ToolExecutionResult> {
   const { toolId, input } = args;
   switch (toolId) {
@@ -365,6 +508,8 @@ export async function runMockExecution(args: { toolId: string; input: ToolExecut
       return executeTaskPriorityTagging(input);
     case 'update-task-state':
       return executeUpdateTaskState(input);
+    case 'remove-tags-from-users':
+      return executeRemoveTagsFromUsers(input);
     default:
       await simulateLatency(300);
       const startedAt = nowIso();

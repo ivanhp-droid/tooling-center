@@ -62,6 +62,11 @@ function normalizeForEnum(value: string) {
   return value.trim().toLowerCase();
 }
 
+function isDynamicColumn(args: { header: string; prefixes: string[] }) {
+  const normalized = args.header.trim().toLowerCase();
+  return args.prefixes.some((prefix) => normalized.startsWith(prefix.trim().toLowerCase()));
+}
+
 export function parseAndValidateCsv(args: {
   text: string;
   filename: string;
@@ -90,6 +95,8 @@ export function parseAndValidateCsv(args: {
   const rawHeaders = splitCsvLine(lines[0]);
   const headers = rawHeaders.map(normalizeHeader);
   const headerSet = new Set(headers);
+  const dynamicPrefixes = schema.dynamicColumnPrefixes ?? [];
+  const dynamicHeaders = headers.filter((header) => isDynamicColumn({ header, prefixes: dynamicPrefixes }));
   const requiredMissing = schema.columns.filter((c) => c.required && !headerSet.has(c.key)).map((c) => c.key);
 
   const rows: Record<string, string>[] = [];
@@ -175,6 +182,18 @@ export function parseAndValidateCsv(args: {
         }
       }
     });
+
+    if (schema.requireAtLeastOneValueInDynamicColumnsPerRow) {
+      const hasDynamicValue = dynamicHeaders.some((header) => String(row[header] ?? '').trim().length > 0);
+      if (!hasDynamicValue) {
+        issues.push({
+          severity: 'error',
+          scope: 'row',
+          rowIndex: i,
+          message: `At least one value is required in columns starting with: ${dynamicPrefixes.join(', ')}.`
+        });
+      }
+    }
   });
 
   if (requiredMissing.length > 0) {
@@ -185,9 +204,19 @@ export function parseAndValidateCsv(args: {
     });
   }
 
+  if (schema.requireAtLeastOneDynamicColumn && dynamicHeaders.length === 0) {
+    issues.push({
+      severity: 'error',
+      scope: 'schema',
+      message: `Missing at least one required dynamic column. Add a column that starts with: ${dynamicPrefixes.join(', ')}.`
+    });
+  }
+
   if (schema.allowUnknownColumns === false) {
     const known = new Set(schema.columns.map((c) => c.key));
-    const unknown = headers.filter((h) => h.length > 0 && !known.has(h));
+    const unknown = headers.filter(
+      (h) => h.length > 0 && !known.has(h) && !isDynamicColumn({ header: h, prefixes: dynamicPrefixes })
+    );
     if (unknown.length > 0) {
       issues.push({
         severity: schema.unknownColumnsSeverity ?? 'warning',
@@ -200,7 +229,15 @@ export function parseAndValidateCsv(args: {
   if (schema.keyColumns && schema.keyColumns.length > 0) {
     const seen = new Map<string, number>();
     rows.forEach((row, i) => {
-      const key = schema.keyColumns!.map((k) => (row[k] ?? '').trim()).join('::');
+      const keyParts = schema.keyColumns!.map((k) => (row[k] ?? '').trim());
+      if (schema.keyColumnsIncludeDynamicPrefixes) {
+        const dynamicValues = dynamicHeaders
+          .map((header) => String(row[header] ?? '').trim())
+          .filter((value) => value.length > 0)
+          .sort((a, b) => a.localeCompare(b));
+        keyParts.push(dynamicValues.join('|'));
+      }
+      const key = keyParts.join('::');
       if (key.trim().length === 0) return;
       const prev = seen.get(key);
       if (prev !== undefined) {

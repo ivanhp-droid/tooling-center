@@ -18,6 +18,10 @@ export type CsvSchema = {
   allowUnknownColumns?: boolean;
   unknownColumnsSeverity?: 'warning' | 'error';
   keyColumns?: string[];
+  dynamicColumnPrefixes?: string[];
+  requireAtLeastOneDynamicColumn?: boolean;
+  requireAtLeastOneValueInDynamicColumnsPerRow?: boolean;
+  keyColumnsIncludeDynamicPrefixes?: boolean;
   templateCsv?: {
     filename: string;
     content: string;

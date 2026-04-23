@@ -24,7 +24,7 @@ async function ensureApiKey(input: ToolExecutionInput) {
 }
 
 export const toolsExecutors: Record<
-  'addUserTags' | 'assignUserToProject' | 'removeUserFromProject' | 'taskPriorityTagging' | 'updateTaskState',
+  'addUserTags' | 'assignUserToProject' | 'removeUserFromProject' | 'taskPriorityTagging' | 'updateTaskState' | 'removeTagsFromUsers',
   (input: ToolExecutionInput) => Promise<ToolExecutionResult>
 > = {
   async addUserTags(input) {
@@ -51,5 +51,12 @@ export const toolsExecutors: Record<
     await ensureApiKey(input);
     await ensureCsv(input);
     return runMockExecution({ toolId: 'update-task-state', input });
+  },
+  async removeTagsFromUsers(input) {
+    await ensureApiKey(input);
+    await ensureCsv(input);
+    // TODO: Replace this mock path with a server-side executor only.
+    // Real deletions must happen in a secure backend route with secret handling, audit logs, RBAC, and dry-run support.
+    return runMockExecution({ toolId: 'remove-tags-from-users', input });
   }
 };
