@@ -55,8 +55,17 @@ export const toolsExecutors: Record<
   async removeTagsFromUsers(input) {
     await ensureApiKey(input);
     await ensureCsv(input);
-    // TODO: Replace this mock path with a server-side executor only.
-    // Real deletions must happen in a secure backend route with secret handling, audit logs, RBAC, and dry-run support.
-    return runMockExecution({ toolId: 'remove-tags-from-users', input });
+    const response = await fetch('/api/tools/remove-tags-from-users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input)
+    });
+
+    if (!response.ok) {
+      const error = (await response.json().catch(() => null)) as { message?: string } | null;
+      throw new Error(error?.message ?? 'Remove Tags execution failed.');
+    }
+
+    return (await response.json()) as ToolExecutionResult;
   }
 };
