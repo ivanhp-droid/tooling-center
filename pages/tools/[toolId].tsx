@@ -9,6 +9,7 @@ import { ApiKeyStatusBanner } from '@/components/tools/ApiKeyStatusBanner';
 import { CsvUploader } from '@/components/tools/CsvUploader';
 import { CsvValidationSummary } from '@/components/tools/CsvValidationSummary';
 import { CsvPreviewTable } from '@/components/tools/CsvPreviewTable';
+import { CsvSchemaDetails } from '@/components/tools/CsvSchemaDetails';
 import { DynamicFieldRenderer } from '@/components/tools/DynamicFieldRenderer';
 import { Button } from '@/components/common/Button';
 import { Card } from '@/components/common/Card';
@@ -210,7 +211,7 @@ export default function ToolPage() {
         {activeTool.requiresCsv && activeTool.csvSchema ? (
           <Card
             title="1 · CSV"
-            subtitle="Upload one file per run. Required columns are listed here, and blocking errors must be fixed before execution is enabled."
+            subtitle="Upload one file per run. Fix all blocking errors before execution is enabled."
           >
             <div className="space-y-4">
               {activeTool.helpText?.overview ? (
@@ -218,17 +219,15 @@ export default function ToolPage() {
               ) : null}
 
               <div className="flex flex-wrap items-end justify-between gap-3">
-                <div className="space-y-1 text-xs text-ink-secondary">
-                  <p>
-                    <span className="font-medium text-ink">Required CSV columns: </span>
-                    <span className="font-mono">{activeTool.csvSchema.columns.filter((c) => c.required).map((c) => c.key).join(', ') || 'None'}</span>
-                  </p>
+                <div className="text-xs text-ink-secondary">
+                  <span className="font-medium text-ink">Expected columns: </span>
+                  <span className="font-mono">{activeTool.csvSchema.columns.map((c) => c.key).join(', ')}</span>
                   {activeTool.csvSchema.dynamicColumnPrefixes && activeTool.csvSchema.dynamicColumnPrefixes.length > 0 ? (
-                    <p>
-                      <span className="font-medium text-ink">Tag/data columns: </span>
-                      add one or more headers that start with{' '}
-                      <span className="font-mono">{activeTool.csvSchema.dynamicColumnPrefixes.join(', ')}</span>.
-                    </p>
+                    <>
+                      {' '}
+                      + one or more columns starting with{' '}
+                      <span className="font-mono">{activeTool.csvSchema.dynamicColumnPrefixes.join(', ')}</span>
+                    </>
                   ) : null}
                 </div>
                 {activeTool.csvSchema.templateCsv ? (
@@ -287,6 +286,7 @@ export default function ToolPage() {
                     ) : null}
                   </div>
                   <CsvValidationSummary parse={csv} schema={activeTool.csvSchema} />
+                  <CsvSchemaDetails schema={activeTool.csvSchema} />
                   <CsvPreviewTable headers={csv.headers} rows={csv.previewRows} />
                 </>
               ) : null}
@@ -296,9 +296,6 @@ export default function ToolPage() {
 
         {activeTool.additionalFields && activeTool.additionalFields.length > 0 ? (
           <Card title="2 · Tool options" subtitle="These apply to every row in this run unless noted otherwise.">
-            <p className="mb-4 text-xs text-ink-secondary">
-              Fields marked <span className="font-semibold text-danger">*</span> are required before you can run.
-            </p>
             <DynamicFieldRenderer
               withCard={false}
               fields={activeTool.additionalFields}
